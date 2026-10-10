@@ -42,23 +42,30 @@ export function TheaterCurtain({ onOpen, playClick, playHoloBeam }: TheaterCurta
 
   return (
     <div
-      aria-label="Theater Grand Entrance Curtain"
+      role="button"
+      tabIndex={0}
+      aria-label="Theater Grand Entrance Curtain - Klik di mana saja untuk membuka"
+      onClick={handleOpenCurtain}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleOpenCurtain()
+        }
+      }}
       className={`fixed inset-0 z-50 overflow-hidden select-none transition-opacity duration-500 ${
-        isOpen ? 'pointer-events-none' : 'pointer-events-auto'
+        isOpen ? 'pointer-events-none' : 'pointer-events-auto cursor-pointer'
       }`}
     >
       {/* 1. Left Theater Curtain Panel */}
       <div
-        className={`absolute top-0 left-0 w-1/2 h-full curtain-velvet z-10 transition-transform duration-[1800ms] origin-left ${
-          isOpen ? '-translate-x-full scale-x-90' : 'translate-x-0 scale-x-100'
-        }`}
+        className={`absolute top-0 left-0 w-1/2 h-full curtain-velvet z-10 transition-transform duration-[1800ms] origin-left ${isOpen ? '-translate-x-full scale-x-90' : 'translate-x-0 scale-x-100'
+          }`}
         style={{
           transitionTimingFunction: 'cubic-bezier(0.77, 0, 0.175, 1)',
         }}
       >
         {/* Right Gold Trim Border with Vermilion Shadow */}
         <div className="absolute right-0 top-0 bottom-0 w-1.5 curtain-gold-border" />
-        
+
         {/* Subtle Ambient Shadow at the split joint */}
         <div className="absolute right-1.5 top-0 bottom-0 w-8 bg-gradient-to-l from-black/80 to-transparent pointer-events-none" />
 
@@ -68,9 +75,8 @@ export function TheaterCurtain({ onOpen, playClick, playHoloBeam }: TheaterCurta
 
       {/* 2. Right Theater Curtain Panel */}
       <div
-        className={`absolute top-0 right-0 w-1/2 h-full curtain-velvet z-10 transition-transform duration-[1800ms] origin-right ${
-          isOpen ? 'translate-x-full scale-x-90' : 'translate-x-0 scale-x-100'
-        }`}
+        className={`absolute top-0 right-0 w-1/2 h-full curtain-velvet z-10 transition-transform duration-[1800ms] origin-right ${isOpen ? 'translate-x-full scale-x-90' : 'translate-x-0 scale-x-100'
+          }`}
         style={{
           transitionTimingFunction: 'cubic-bezier(0.77, 0, 0.175, 1)',
         }}
@@ -91,22 +97,22 @@ export function TheaterCurtain({ onOpen, playClick, playHoloBeam }: TheaterCurta
 
       {/* 3. Center Sanctuary Seal & Grand Unveil Button */}
       <div
-        className={`absolute inset-0 flex flex-col items-center justify-center z-20 transition-all duration-700 ease-out px-4 ${
-          isOpen ? 'opacity-0 scale-90 -translate-y-4 pointer-events-none' : 'opacity-100 scale-100 translate-y-0'
-        }`}
+        className={`absolute inset-0 flex flex-col items-center justify-center z-20 transition-all duration-700 ease-out px-4 ${isOpen ? 'opacity-0 scale-90 -translate-y-4 pointer-events-none' : 'opacity-100 scale-100 translate-y-0'
+          }`}
       >
         {/* Glowing Background Radial Halo */}
         <div className="absolute w-[340px] sm:w-[480px] h-[340px] sm:h-[480px] rounded-full bg-gradient-to-r from-rose-950/40 via-red-900/30 to-amber-950/20 blur-3xl pointer-events-none" />
 
         {/* Shinto Torii & Cyber Crest Container */}
         <div className="relative z-10 flex flex-col items-center text-center max-w-md w-full">
-          
+
           {/* Top Kanji Badge & Cyber Torii Glyphs */}
           <div className="flex items-center gap-3 mb-2">
             <span className="w-8 sm:w-12 h-px bg-gradient-to-r from-transparent to-amber-400/80" />
             <div className="px-3 py-1 rounded-full border border-amber-400/40 bg-black/60 backdrop-blur-md text-[10px] sm:text-xs font-tech tracking-[0.3em] text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.25)] flex items-center gap-1.5">
               <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
-              <span>THEATRICAL PREMIERE</span>
+              <span>IRFANDY AZIZ</span>
+              <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
             </div>
             <span className="w-8 sm:w-12 h-px bg-gradient-to-l from-transparent to-amber-400/80" />
           </div>
@@ -116,23 +122,13 @@ export function TheaterCurtain({ onOpen, playClick, playHoloBeam }: TheaterCurta
             開幕
           </h1>
 
-          {/* Subtitle Matrix */}
-          <div className="mt-2 space-y-1">
-            <p className="font-tech text-xs sm:text-sm font-semibold tracking-[0.25em] text-rose-300 uppercase">
-              CHRONICLE GATEWAY // IRFAN D. Y.
-            </p>
-            <p className="font-tech text-[10px] sm:text-xs tracking-wider text-slate-400">
-              CYBER ARCHITECT & FULL STACK DEVELOPER
-            </p>
-          </div>
-
           {/* Elegant Shinto Rope / Divider Bar */}
           <div className="relative w-48 sm:w-60 h-2 my-5 flex items-center justify-center">
             <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-amber-400/80 to-transparent" />
             <div className="absolute w-2 h-2 rounded-full bg-rose-500 border border-amber-300 shadow-[0_0_8px_#ff0055]" />
           </div>
 
-          {/* The Grand Unveil Button (Click to Open Curtain + Play Music) */}
+          {/* The Grand Unveil Button (Click button or anywhere on screen) */}
           <button
             onClick={handleOpenCurtain}
             className="group relative px-7 sm:px-9 py-3.5 sm:py-4 rounded-xl font-tech text-xs sm:text-sm font-bold tracking-[0.2em] uppercase text-amber-200 transition-all duration-300 overflow-hidden cursor-pointer active:scale-95"
@@ -157,9 +153,9 @@ export function TheaterCurtain({ onOpen, playClick, playHoloBeam }: TheaterCurta
           </button>
 
           {/* Sensory Cue / Note */}
-          <div className="mt-4 flex items-center gap-2 text-[10px] font-tech text-slate-400/80">
+          <div className="mt-4 flex items-center gap-2 text-[10px] font-tech text-slate-300/90">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-            <span>Klik untuk membuka gerbang & menyalakan audio spasial BGM</span>
+            <span>Klik di mana saja pada layar untuk membuka gerbang & menyalakan musik</span>
           </div>
         </div>
       </div>
