@@ -42,11 +42,13 @@ export interface ServiceItem {
   skills: string[]
 }
 
+const BASE = import.meta.env.BASE_URL || '/'
+
 export const OPERATOR_PROFILE = {
   name: 'Irfandy Aziz',
   role: 'Full-stack Developer / IT Developer',
   kanjiTitle: '電脳開発者 // フルスタック',
-  avatar: '/profile.png',
+  avatar: `${BASE}profile.png`,
   philosophy: 'Clean Code, Scalability, & User-Centric Experience',
   status: 'AVAILABLE FOR HIRE',
   location: 'Cirebon, Indonesia',
@@ -88,7 +90,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Audit-Ready KPI Reporting & Compliance Dashboard'
     ],
     techStack: ['Laravel', 'Vue.js 3', 'Tailwind CSS', 'MySQL', 'GPS Telemetry'],
-    imageMockup: '/projects/tms.png',
+    imageMockup: `${BASE}projects/tms.png`,
     liveUrl: 'https://irfandyaziz.com',
     githubUrl: 'https://github.com/irfandyz'
   },
@@ -108,7 +110,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Cross-platform Flutter Mobile Integration'
     ],
     techStack: ['Laravel', 'Node.js', 'MySQL', 'Flutter', 'Bootstrap', 'REST API'],
-    imageMockup: '/projects/si_app.webp',
+    imageMockup: `${BASE}projects/si_app.webp`,
     githubUrl: 'https://github.com/irfandyz'
   },
   {
@@ -127,7 +129,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Secure Employee Self-Service Portal'
     ],
     techStack: ['Node.js', 'Express.js', 'MySQL', 'REST API', 'Cron Engine'],
-    imageMockup: '/projects/hris.png',
+    imageMockup: `${BASE}projects/hris.png`,
     githubUrl: 'https://github.com/irfandyz'
   },
   {
@@ -146,7 +148,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Modul SPP, Koperasi, dan Penilaian Akademik'
     ],
     techStack: ['Laravel', 'MySQL', 'Bootstrap', 'DOMPDF', 'REST API'],
-    imageMockup: '/projects/infrastructure.png',
+    imageMockup: `${BASE}projects/infrastructure.png`,
     githubUrl: 'https://github.com/irfandyz'
   },
   {
@@ -165,7 +167,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Interactive Media Gallery'
     ],
     techStack: ['Laravel', 'MySQL', 'Bootstrap', 'SEO Metadata'],
-    imageMockup: '/projects/mandiri_cipta_adikarya.png',
+    imageMockup: `${BASE}projects/mandiri_cipta_adikarya.png`,
     liveUrl: 'https://irfandyaziz.com'
   },
   {
@@ -184,7 +186,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Zero-clutter Dual-Zone Career Chrono-Console'
     ],
     techStack: ['React', 'Three.js', 'React Three Fiber', 'Tailwind CSS', 'TypeScript'],
-    imageMockup: '/projects/portfolio.png',
+    imageMockup: `${BASE}projects/portfolio.png`,
     liveUrl: 'https://irfandyaziz.com',
     githubUrl: 'https://github.com/irfandyz'
   }

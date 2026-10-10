@@ -28,7 +28,8 @@ export function useAudio() {
     const currentVol = savedVol !== null ? Number(JSON.parse(savedVol)) : 0.75
 
     // 1. Initialize BGM
-    const bgm = new Audio('/sound/bgm.mp3')
+    const baseUrl = import.meta.env.BASE_URL || '/'
+    const bgm = new Audio(`${baseUrl}sound/bgm.mp3`)
     bgm.loop = true
     bgm.volume = currentVol
     bgmRef.current = bgm
@@ -36,7 +37,7 @@ export function useAudio() {
     // 2. Initialize Click Pool (4 instances for overlapping rapid clicks)
     const pool: HTMLAudioElement[] = []
     for (let i = 0; i < 4; i++) {
-      const click = new Audio('/sound/click.mp3')
+      const click = new Audio(`${baseUrl}sound/click.mp3`)
       click.volume = Math.min(1, currentVol * 1.15)
       pool.push(click)
     }
