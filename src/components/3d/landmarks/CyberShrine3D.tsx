@@ -101,9 +101,9 @@ export function CyberShrine3D({
       groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotY, 0.05)
     }
 
-    // Inner shrine pulsing light
+    // Inner shrine pulsing light (Gentle, dim warm candle ember)
     if (innerLightRef.current) {
-      innerLightRef.current.intensity = 1.8 + Math.sin(time * 3) * 0.5
+      innerLightRef.current.intensity = 0.45 + Math.sin(time * 2) * 0.08
     }
 
     // Lantern subtle sway
@@ -155,17 +155,81 @@ export function CyberShrine3D({
     []
   )
 
-  const shojiWarm = useMemo(
+  // Authentic Japanese Shoji Lattice Grid Texture (Dim, moody, dark paper with wooden Kumiko grid)
+  const shojiTexture = useMemo(() => {
+    const canvas = document.createElement('canvas')
+    canvas.width = 256
+    canvas.height = 256
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return new THREE.Texture()
+
+    // 1. Dark muted washi paper base (dim, not bright!)
+    ctx.fillStyle = '#181413'
+    ctx.fillRect(0, 0, 256, 256)
+
+    // Grid proportions: 4 columns x 6 rows of shoji panes
+    const cols = 4
+    const rows = 6
+    const cellW = 256 / cols
+    const cellH = 256 / rows
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x = c * cellW
+        const y = r * cellH
+        // Subtle, very dim soft amber center gradient per pane
+        const grad = ctx.createRadialGradient(
+          x + cellW / 2, y + cellH / 2, 2,
+          x + cellW / 2, y + cellH / 2, cellW / 1.4
+        )
+        grad.addColorStop(0, '#2e2019') // Soft dim ember tone
+        grad.addColorStop(1, '#1a1412') // Deep dark edge
+        ctx.fillStyle = grad
+        ctx.fillRect(x + 2, y + 2, cellW - 4, cellH - 4)
+      }
+    }
+
+    // 2. Wooden Kumiko Grid Lines (Dark obsidian-wood frame lines)
+    ctx.strokeStyle = '#080c14'
+    ctx.lineWidth = 4
+
+    // Vertical lattice dividers
+    for (let c = 0; c <= cols; c++) {
+      ctx.beginPath()
+      ctx.moveTo(c * cellW, 0)
+      ctx.lineTo(c * cellW, 256)
+      ctx.stroke()
+    }
+    // Horizontal lattice dividers
+    for (let r = 0; r <= rows; r++) {
+      ctx.beginPath()
+      ctx.moveTo(0, r * cellH)
+      ctx.lineTo(256, r * cellH)
+      ctx.stroke()
+    }
+
+    // Outer sturdy frame
+    ctx.lineWidth = 8
+    ctx.strokeRect(0, 0, 256, 256)
+
+    const texture = new THREE.CanvasTexture(canvas)
+    texture.wrapS = THREE.RepeatWrapping
+    texture.wrapT = THREE.RepeatWrapping
+    return texture
+  }, [])
+
+  // Dim, Non-Blinding Shoji Material
+  const shojiMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#ffeedd',
-        emissive: '#ffeedd',
-        emissiveIntensity: 0.9,
-        transparent: true,
-        opacity: 0.85,
-        roughness: 0.2,
+        map: shojiTexture,
+        roughness: 0.85,
+        metalness: 0.1,
+        emissive: '#d97736',
+        emissiveMap: shojiTexture,
+        emissiveIntensity: 0.18, // Very dim, moody ambiance
       }),
-    []
+    [shojiTexture]
   )
 
   return (
@@ -214,34 +278,34 @@ export function CyberShrine3D({
         <cylinderGeometry args={[0.09, 0.09, 0.05, 16]} />
       </mesh>
 
-      {/* Shoji Lattice Glowing Walls */}
+      {/* Authentic Japanese Shoji Lattice Walls (Dim, Moody, Kumiko Grid) */}
       {/* Back Wall */}
-      <mesh position={[0, 0.5, -0.85]} material={shojiWarm}>
+      <mesh position={[0, 0.5, -0.85]} material={shojiMaterial}>
         <planeGeometry args={[1.65, 1.2]} />
       </mesh>
       {/* Left Wall */}
-      <mesh position={[-0.85, 0.5, 0]} rotation={[0, Math.PI / 2, 0]} material={shojiWarm}>
+      <mesh position={[-0.85, 0.5, 0]} rotation={[0, Math.PI / 2, 0]} material={shojiMaterial}>
         <planeGeometry args={[1.65, 1.2]} />
       </mesh>
       {/* Right Wall */}
-      <mesh position={[0.85, 0.5, 0]} rotation={[0, -Math.PI / 2, 0]} material={shojiWarm}>
+      <mesh position={[0.85, 0.5, 0]} rotation={[0, -Math.PI / 2, 0]} material={shojiMaterial}>
         <planeGeometry args={[1.65, 1.2]} />
       </mesh>
       {/* Front Wall (Flanking Central Shrine Doorway) */}
-      <mesh position={[-0.6, 0.5, 0.85]} material={shojiWarm}>
+      <mesh position={[-0.6, 0.5, 0.85]} material={shojiMaterial}>
         <planeGeometry args={[0.45, 1.2]} />
       </mesh>
-      <mesh position={[0.6, 0.5, 0.85]} material={shojiWarm}>
+      <mesh position={[0.6, 0.5, 0.85]} material={shojiMaterial}>
         <planeGeometry args={[0.45, 1.2]} />
       </mesh>
 
-      {/* Inner Shrine Sanctuary Hearth Light */}
+      {/* Inner Shrine Sanctuary Hearth Light (Dim, Warm, Atmospheric) */}
       <pointLight
         ref={innerLightRef}
         position={[0, 0.5, 0]}
-        color="#ffaa44"
-        intensity={2.2}
-        distance={4.5}
+        color="#cc6622"
+        intensity={0.45}
+        distance={3.0}
       />
 
       {/* Central Holographic Altar Gem */}
