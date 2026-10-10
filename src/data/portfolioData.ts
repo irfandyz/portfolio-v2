@@ -94,8 +94,27 @@ export const PROJECTS_DATA: ProjectItem[] = [
     githubUrl: 'https://github.com/irfandyz'
   },
   {
+    id: 'navaneva-erp',
+    code: 'PRJ-02 // NAVANEVA-ERP',
+    title: 'Navaneva ERP (SCM & Finance)',
+    client: 'Enterprise Systems',
+    year: '2025',
+    category: 'Full Stack',
+    status: 'PRODUCTION ● CLOUD ERP',
+    summary: 'Sistem ERP berbasis web terintegrasi yang berfokus pada Supply Chain Management (SCM) dan manajemen keuangan korporat, mencakup pengadaan barang (procurement), inventori multi-gudang, penagihan, serta pelaporan cash flow dan laba rugi real-time.',
+    highlights: [
+      'Supply Chain Management (SCM) & Automated Vendor Procurement',
+      'Corporate Finance, Multi-Currency Invoicing & Real-Time Financial Ledgers',
+      'Multi-Warehouse Inventory Tracking with Automated Stock Reconciliation',
+      'Decoupled Architecture: High-Performance React SPA & Scalable Laravel Backend'
+    ],
+    techStack: ['React', 'Laravel', 'REST API', 'MySQL', 'Tailwind CSS', 'SCM & Finance'],
+    imageMockup: `${BASE}projects/navaneva.png`,
+    githubUrl: 'https://github.com/irfandyz'
+  },
+  {
     id: 'si-app',
-    code: 'PRJ-02 // SI-MEDIA-ECOSYSTEM',
+    code: 'PRJ-03 // SI-MEDIA-ECOSYSTEM',
     title: 'Sekolah Iklan App (SI APP)',
     client: 'Sekolah Iklan Indonesia',
     year: '2023',
@@ -114,7 +133,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   },
   {
     id: 'hrms',
-    code: 'PRJ-03 // HRMS-BIOMETRIC',
+    code: 'PRJ-04 // HRMS-BIOMETRIC',
     title: 'Human Resource Management System (HRMS)',
     client: 'Enterprise Systems',
     year: '2022',
@@ -133,7 +152,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   },
   {
     id: 'school-admin',
-    code: 'PRJ-04 // EDU-INFRA-SYS',
+    code: 'PRJ-05 // EDU-INFRA-SYS',
     title: 'Infrastruktur & Administrasi Sekolah Terpadu',
     client: 'Yayasan Pendidikan',
     year: '2023',
@@ -152,7 +171,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   },
   {
     id: 'mandiri-cipta',
-    code: 'PRJ-05 // EXPORT-SHOWCASE',
+    code: 'PRJ-06 // EXPORT-SHOWCASE',
     title: 'Website Profil CV. Mandiri Cipta Adikarya',
     client: 'CV. Mandiri Cipta Adikarya',
     year: '2024',
@@ -171,7 +190,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   },
   {
     id: 'portfolio-v2',
-    code: 'PRJ-06 // CYBER-DECK-V2',
+    code: 'PRJ-07 // CYBER-DECK-V2',
     title: 'Personal Portfolio Cyber 3D Deck',
     client: 'Self Project',
     year: '2026',
