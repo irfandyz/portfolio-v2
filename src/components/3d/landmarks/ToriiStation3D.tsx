@@ -24,12 +24,12 @@ export function ToriiStation3D({
     let targetY = 0.0
 
     if (isWarping) {
-      // Warp speed dive: Torii gate flies backward past the camera!
-      targetZ = 14.0
-      targetScale = 1.8
-      targetY = 0.2
+      // Walking pace through gate: Torii gate glides smoothly past the camera
+      targetZ = 12.0
+      targetScale = 1.6
+      targetY = 0.1
     } else if (isEntered) {
-      // Once entered, Torii gate remains behind camera in the distance
+      // Once entered, Torii gate remains far behind camera in the distance
       targetZ = 16.0
       targetScale = 0.001
       targetY = -1.0
@@ -39,7 +39,8 @@ export function ToriiStation3D({
       targetY = -1.0
     }
 
-    const dampSpeed = isWarping ? 8 : 4
+    // Gentle walking damp speed (2.8) instead of rushing
+    const dampSpeed = isWarping ? 2.8 : 4.0
 
     groupRef.current.scale.x = THREE.MathUtils.damp(groupRef.current.scale.x, targetScale, dampSpeed, delta)
     groupRef.current.scale.y = THREE.MathUtils.damp(groupRef.current.scale.y, targetScale, dampSpeed, delta)

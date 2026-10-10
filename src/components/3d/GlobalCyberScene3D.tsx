@@ -46,8 +46,8 @@ function CameraRig({ activeChamber, isEntered = false, isWarping = false }: Came
 
     if (activeChamber === 0) {
       if (isWarping) {
-        // High-speed warp dive through gate
-        config = { pos: [0, 0.4, 1.8], lookAt: [0, 0.3, -3.0] }
+        // Walking pace forward through the gate
+        config = { pos: [0, 0.5, 3.5], lookAt: [0, 0.35, -3.5] }
       } else if (isEntered) {
         // Inside Sanctuary facing the Cyber Shrine
         config = { pos: [0, 0.5, 4.6], lookAt: [0, 0.35, 0] }
@@ -57,7 +57,7 @@ function CameraRig({ activeChamber, isEntered = false, isWarping = false }: Came
       }
     }
 
-    const dampSpeed = isWarping ? 7 : 3.5
+    const dampSpeed = isWarping ? 2.6 : 3.5
 
     // Mouse Parallax Offset
     const parallaxX = state.pointer.x * 0.45

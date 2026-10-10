@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
@@ -16,6 +16,16 @@ export function CyberShrine3D({
   const groupRef = useRef<THREE.Group>(null)
   const innerLightRef = useRef<THREE.PointLight>(null)
   const lanternsRef = useRef<THREE.Group>(null)
+  const warpStartTimeRef = useRef<number | null>(null)
+
+  // Track elapsed time since warp started
+  useEffect(() => {
+    if (isWarping && warpStartTimeRef.current === null) {
+      warpStartTimeRef.current = performance.now()
+    } else if (!isWarping && isEntered) {
+      warpStartTimeRef.current = null
+    }
+  }, [isWarping, isEntered])
 
   // Floating ambient shrine embers
   const emberCount = 60
@@ -39,21 +49,30 @@ export function CyberShrine3D({
 
     if (activeChamber === 0) {
       if (isWarping) {
-        // Approaching rapidly from deep background towards camera!
-        targetZ = 0.0
-        targetScale = 1.0
-        targetY = -0.2
-        dampSpeed = 4.2
+        const elapsed = warpStartTimeRef.current ? performance.now() - warpStartTimeRef.current : 0
+        // STEP 1 DELAY: While walking through the Torii Gate (~1100ms), shrine waits deep in the distance
+        if (elapsed < 1100) {
+          targetZ = -22.0
+          targetScale = 0.3
+          targetY = -0.1
+          dampSpeed = 2.0
+        } else {
+          // STEP 2 REVEAL: Torii gate has passed, shrine emerges slowly and majestically from the deep fog
+          targetZ = 0.0
+          targetScale = 1.0
+          targetY = -0.2
+          dampSpeed = 2.2 // Gentle, graceful approaching speed
+        }
       } else if (isEntered) {
-        // Sits majestic in front of camera in Hero section
+        // STEP 3: Sits majestic in front of camera in Hero section
         targetZ = 0.0
         targetScale = 1.0
         targetY = -0.2
         dampSpeed = 3.5
       } else {
         // Initial state before entering: Placed far in the deep distance behind fog!
-        targetZ = -18.0
-        targetScale = 0.35
+        targetZ = -22.0
+        targetScale = 0.3
         targetY = -0.1
         dampSpeed = 2.0
       }
@@ -150,7 +169,7 @@ export function CyberShrine3D({
   )
 
   return (
-    <group ref={groupRef} position={[0, -0.1, -18.0]} scale={[0.35, 0.35, 0.35]}>
+    <group ref={groupRef} position={[0, -0.1, -22.0]} scale={[0.3, 0.3, 0.3]}>
       {/* 1. Stone Foundation Plinth & Steps */}
       <mesh position={[0, -0.4, 0]} material={stonePlinth}>
         <boxGeometry args={[3.2, 0.2, 3.2]} />

@@ -30,11 +30,11 @@ export function App() {
     playHoloBeam()
     unmuteAndPlay()
 
-    // Smooth warp dive transition through the Torii gate into the inner shrine
+    // 1.1s walking through gate + 1.6s shrine slowly approaching = 2.7s total cinematic entrance
     setTimeout(() => {
       setIsWarping(false)
       setIsEntered(true)
-    }, 1200)
+    }, 2700)
   }
 
   return (
