@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { Volume2, VolumeX, Music2, Volume1 } from 'lucide-react'
+import { Volume2, VolumeX, Music2, Volume1, SkipForward } from 'lucide-react'
 
 interface AudioBubbleProps {
   isMuted: boolean
@@ -7,6 +7,8 @@ interface AudioBubbleProps {
   playClick: () => void
   volume: number
   setVolume: (val: number) => void
+  trackTitle?: string
+  nextTrack?: () => void
 }
 
 export function AudioBubble({
@@ -14,7 +16,9 @@ export function AudioBubble({
   toggleMute,
   playClick,
   volume,
-  setVolume
+  setVolume,
+  trackTitle = 'TRACK-01',
+  nextTrack
 }: AudioBubbleProps) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
   const [isButtonHovered, setIsButtonHovered] = useState<boolean>(false)
@@ -143,7 +147,7 @@ export function AudioBubble({
           }`}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-          <span>{!isMuted ? `BGM & SFX // ${volPercent}%` : 'AUDIO // MUTED'}</span>
+          <span>{!isMuted ? `${trackTitle} // ${volPercent}%` : 'AUDIO // MUTED'}</span>
 
           {/* Equalizer animation when active */}
           {!isMuted && (
@@ -164,7 +168,7 @@ export function AudioBubble({
           onMouseEnter={handleButtonMouseEnter}
           onMouseLeave={handleButtonMouseLeave}
           aria-label={isMuted ? 'Nyalakan Audio BGM & SFX' : 'Senyapkan Audio BGM & SFX'}
-          title={isMuted ? 'Klik untuk Nyalakan Musik' : 'Klik untuk Senyapkan (Hover untuk Volume)'}
+          title={isMuted ? 'Klik untuk Nyalakan Musik' : `Klik untuk Senyapkan (${trackTitle} - Hover untuk Volume)`}
           className={`pointer-events-auto relative w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 backdrop-blur-xl group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 ${
             !isMuted
               ? 'bg-[#080d1a]/90 border border-cyan-400/70 text-cyan-300 shadow-[0_0_24px_rgba(0,240,255,0.45)] hover:shadow-[0_0_32px_rgba(0,240,255,0.7)] hover:border-cyan-300 hover:scale-105'
@@ -204,7 +208,7 @@ export function AudioBubble({
         onMouseEnter={handlePanelMouseEnter}
         onMouseLeave={handlePanelMouseLeave}
         onWheel={handleWheel}
-        className={`mt-2 mr-0.5 w-11 md:w-12 py-3 px-2 rounded-2xl border backdrop-blur-2xl transition-all duration-300 flex flex-col items-center gap-2.5 shadow-[0_0_30px_rgba(0,240,255,0.3)] ${
+        className={`mt-2 mr-0.5 w-11 md:w-12 py-3 px-2 rounded-2xl border backdrop-blur-2xl transition-all duration-300 flex flex-col items-center gap-2 shadow-[0_0_30px_rgba(0,240,255,0.3)] ${
           isMenuOpen && !isMuted
             ? 'opacity-100 translate-y-0 pointer-events-auto bg-[#080d1a]/95 border-cyan-400/60'
             : 'opacity-0 -translate-y-2 pointer-events-none bg-[#080d1a]/0 border-transparent'
@@ -219,7 +223,7 @@ export function AudioBubble({
         <div
           ref={trackRef}
           onMouseDown={handleMouseDown}
-          className="relative w-2.5 h-28 rounded-full bg-slate-900 border border-cyan-500/40 cursor-pointer overflow-hidden flex flex-col justify-end items-center group shadow-inner"
+          className="relative w-2.5 h-24 rounded-full bg-slate-900 border border-cyan-500/40 cursor-pointer overflow-hidden flex flex-col justify-end items-center group shadow-inner"
           title="Geser atau scroll untuk atur volume"
         >
           {/* Subtle Grid Track Tick Marks */}
@@ -240,7 +244,7 @@ export function AudioBubble({
           </div>
         </div>
 
-        {/* Quick Min / Max Buttons */}
+        {/* Quick Min / Max Buttons & Track Skip */}
         <div className="flex flex-col gap-1 w-full pt-1 border-t border-cyan-500/20">
           <button
             onClick={(e) => {
@@ -264,6 +268,22 @@ export function AudioBubble({
           >
             LOW
           </button>
+
+          {/* Next / Switch Track button */}
+          {nextTrack && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                nextTrack()
+                playClick()
+              }}
+              title="Lewati / Putar Track Berikutnya"
+              className="w-full mt-0.5 py-1 text-[8px] font-tech font-bold text-pink-400 hover:text-white hover:bg-pink-500/25 border border-pink-500/30 rounded flex items-center justify-center gap-0.5 transition-colors cursor-pointer group"
+            >
+              <SkipForward className="w-2.5 h-2.5 text-pink-400 group-hover:scale-110 transition-transform" />
+              <span>SKIP</span>
+            </button>
+          )}
         </div>
       </div>
     </aside>

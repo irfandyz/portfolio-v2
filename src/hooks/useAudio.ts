@@ -12,6 +12,10 @@ export function useAudio() {
     return saved !== null ? Number(JSON.parse(saved)) : 0.75 // Default 75% volume
   })
 
+  // Dual Track Playlist: track-1.mp3 & track-2.mp3
+  const [trackIndex, setTrackIndex] = useState<number>(0)
+  const trackIndexRef = useRef<number>(0)
+
   // Background Music Ref
   const bgmRef = useRef<HTMLAudioElement | null>(null)
 
@@ -22,17 +26,59 @@ export function useAudio() {
   // Web Audio Context for secondary procedural SFX (hologram beam, warp)
   const audioCtxRef = useRef<AudioContext | null>(null)
 
+  // Switch to specific track in playlist
+  const switchTrack = useCallback((index: number, autoPlayIfUnmuted: boolean = true) => {
+    const baseUrl = import.meta.env.BASE_URL || '/'
+    const tracks = ['sound/track-1.mp3', 'sound/track-2.mp3']
+    const nextIdx = index % tracks.length
+
+    trackIndexRef.current = nextIdx
+    setTrackIndex(nextIdx)
+
+    if (bgmRef.current) {
+      bgmRef.current.pause()
+      bgmRef.current.src = `${baseUrl}${tracks[nextIdx]}`
+      bgmRef.current.currentTime = 0
+      bgmRef.current.load()
+
+      if (autoPlayIfUnmuted && !isMuted) {
+        bgmRef.current.play().catch(() => {
+          // Handled: browser autoplay restrictions
+        })
+      }
+    }
+  }, [isMuted])
+
+  // Skip or go to next track
+  const nextTrack = useCallback(() => {
+    const nextIdx = (trackIndexRef.current + 1) % 2
+    switchTrack(nextIdx, true)
+  }, [switchTrack])
+
   // Initialize Audio Instances on client mount
   useEffect(() => {
     const savedVol = localStorage.getItem('cyber_audio_volume')
     const currentVol = savedVol !== null ? Number(JSON.parse(savedVol)) : 0.75
-
-    // 1. Initialize BGM
     const baseUrl = import.meta.env.BASE_URL || '/'
-    const bgm = new Audio(`${baseUrl}sound/bgm.mp3`)
-    bgm.loop = true
+
+    // 1. Initialize BGM with track-1.mp3 (loop = false to enable automatic alternation)
+    const bgm = new Audio(`${baseUrl}sound/track-1.mp3`)
+    bgm.loop = false
     bgm.volume = currentVol
     bgmRef.current = bgm
+
+    // Handle track completion: automatically rotate to next track!
+    const handleEnded = () => {
+      const nextIdx = (trackIndexRef.current + 1) % 2
+      trackIndexRef.current = nextIdx
+      setTrackIndex(nextIdx)
+      bgm.src = `${baseUrl}${nextIdx === 0 ? 'sound/track-1.mp3' : 'sound/track-2.mp3'}`
+      bgm.currentTime = 0
+      bgm.load()
+      bgm.play().catch(() => {})
+    }
+
+    bgm.addEventListener('ended', handleEnded)
 
     // 2. Initialize Click Pool (4 instances for overlapping rapid clicks)
     const pool: HTMLAudioElement[] = []
@@ -44,6 +90,7 @@ export function useAudio() {
     clickPoolRef.current = pool
 
     return () => {
+      bgm.removeEventListener('ended', handleEnded)
       bgm.pause()
       bgm.src = ''
     }
@@ -203,5 +250,17 @@ export function useAudio() {
     }
   }, [])
 
-  return { isMuted, toggleMute, playClick, playHoloBeam, playWarp, volume, setVolume }
+  return {
+    isMuted,
+    toggleMute,
+    playClick,
+    playHoloBeam,
+    playWarp,
+    volume,
+    setVolume,
+    trackIndex,
+    nextTrack,
+    switchTrack,
+    trackTitle: trackIndex === 0 ? 'TRACK-01' : 'TRACK-02'
+  }
 }

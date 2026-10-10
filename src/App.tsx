@@ -14,7 +14,7 @@ import { ContactSection } from './components/sections/ContactSection'
 import { CyberCursor } from './components/ui/CyberCursor'
 
 export function App() {
-  const { isMuted, toggleMute, playClick, playHoloBeam, volume, setVolume } = useAudio()
+  const { isMuted, toggleMute, playClick, playHoloBeam, volume, setVolume, trackTitle, nextTrack } = useAudio()
   const { activeChamber, containerRef, scrollToChamber } = useScrollSnap()
 
   return (
@@ -35,6 +35,8 @@ export function App() {
         playClick={playClick}
         volume={volume}
         setVolume={setVolume}
+        trackTitle={trackTitle}
+        nextTrack={nextTrack}
       />
 
       {/* Side Vertical Radar Navigation */}
