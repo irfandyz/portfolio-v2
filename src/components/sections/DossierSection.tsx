@@ -212,13 +212,13 @@ export function DossierSection({ playClick, isActive = true }: DossierSectionPro
                   <span>DATABASE & INFRASTRUCTURE</span>
                 </div>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 font-tech">
-                  HIGH OPTIMIZATION 88%
+                  HIGH OPTIMIZATION 90%
                 </span>
               </div>
 
               {/* Progress telemetry bar */}
               <div className="w-full h-1 bg-slate-800 rounded-full mb-3 overflow-hidden">
-                <div className="w-[88%] h-full bg-gradient-to-r from-amber-500 to-yellow-500 shadow-[0_0_10px_rgba(251,191,36,0.8)]" />
+                <div className="w-[90%] h-full bg-gradient-to-r from-amber-500 to-yellow-500 shadow-[0_0_10px_rgba(251,191,36,0.8)]" />
               </div>
 
               <p className="text-xs text-slate-300 mb-3 leading-relaxed font-light">
