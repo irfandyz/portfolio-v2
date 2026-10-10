@@ -105,25 +105,94 @@ export function useScrollSnap() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [nextChamber, prevChamber, scrollToChamber])
 
-  // Mobile Touch Swipe Navigation
+  // Mobile Touch Swipe Navigation with Inner Scroll Protection
   useEffect(() => {
     let touchStartY = 0
-    let touchEndY = 0
+    let touchStartX = 0
+    let scrollableAncestor: HTMLElement | null = null
+    let startScrollTop = 0
+
+    // Find nearest scrollable ancestor between touch target and container
+    const findScrollableAncestor = (target: HTMLElement | null): HTMLElement | null => {
+      let current = target
+      while (current && current !== containerRef.current) {
+        if (
+          current.classList.contains('cyber-scrollbar') ||
+          current.classList.contains('overflow-y-auto') ||
+          current.classList.contains('overflow-y-scroll')
+        ) {
+          if (current.scrollHeight > current.clientHeight) {
+            return current
+          }
+        }
+        current = current.parentElement
+      }
+      return null
+    }
 
     const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.changedTouches[0].screenY
+      if (e.touches.length !== 1) return
+      touchStartY = e.touches[0].clientY
+      touchStartX = e.touches[0].clientX
+
+      const target = e.target as HTMLElement
+      scrollableAncestor = findScrollableAncestor(target)
+      if (scrollableAncestor) {
+        startScrollTop = scrollableAncestor.scrollTop
+      }
     }
 
     const handleTouchEnd = (e: TouchEvent) => {
-      touchEndY = e.changedTouches[0].screenY
+      if (isScrollingRef.current) return
+      const touchEndY = e.changedTouches[0].clientY
+      const touchEndX = e.changedTouches[0].clientX
       const deltaY = touchStartY - touchEndY
-      // Swipe threshold: 50px
-      if (Math.abs(deltaY) > 50 && !isScrollingRef.current) {
+      const deltaX = touchStartX - touchEndX
+
+      // Must be predominantly vertical swipe (not horizontal/diagonal)
+      if (Math.abs(deltaY) < Math.abs(deltaX) * 1.5) {
+        return
+      }
+
+      // If user was touching an inner scrollable element (e.g. cards, bento list)
+      if (scrollableAncestor) {
+        const currentScrollTop = scrollableAncestor.scrollTop
+        const maxScrollTop = scrollableAncestor.scrollHeight - scrollableAncestor.clientHeight
+
+        // If swiping up (scrolling content downward):
         if (deltaY > 0) {
-          nextChamber()
-        } else {
-          prevChamber()
+          const wasAtBottom = startScrollTop >= maxScrollTop - 15
+          const isAtBottom = currentScrollTop >= maxScrollTop - 15
+          // If not already at bottom, user is still reading content! Do NOT switch chamber!
+          if (!wasAtBottom || !isAtBottom) {
+            return
+          }
         }
+        // If swiping down (scrolling content upward):
+        else if (deltaY < 0) {
+          const wasAtTop = startScrollTop <= 15
+          const isAtTop = currentScrollTop <= 15
+          // If not already at top, user is still scrolling up content! Do NOT switch chamber!
+          if (!wasAtTop || !isAtTop) {
+            return
+          }
+        }
+
+        // Inside inner container, require deliberate swipe distance (>= 85px)
+        if (Math.abs(deltaY) < 85) {
+          return
+        }
+      } else {
+        // Outside inner scrollable container (e.g. background, header)
+        if (Math.abs(deltaY) < 65) {
+          return
+        }
+      }
+
+      if (deltaY > 0) {
+        nextChamber()
+      } else {
+        prevChamber()
       }
     }
 

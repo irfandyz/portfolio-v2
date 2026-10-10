@@ -101,6 +101,15 @@
   text-shadow: 0 0 12px rgba(255, 0, 85, 0.7);
 }
 
+/* Prevent Mobile Scroll Chaining for Inner Containers */
+.cyber-scrollbar,
+.overflow-y-auto,
+[class*="overflow-y-auto"] {
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
 /* Custom Cyber Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
