@@ -154,6 +154,15 @@ export function useAudio() {
     })
   }, [])
 
+  // Force unmute and start BGM playback (e.g., from Theater Curtain Unveil)
+  const unmuteAndPlay = useCallback(() => {
+    setIsMuted(false)
+    localStorage.setItem('cyber_audio_muted', JSON.stringify(false))
+    if (bgmRef.current) {
+      bgmRef.current.play().catch(() => {})
+    }
+  }, [])
+
   // Play Button Click SFX using the user's /sound/click.mp3
   const playClick = useCallback(() => {
     if (isMuted) return
@@ -253,6 +262,7 @@ export function useAudio() {
   return {
     isMuted,
     toggleMute,
+    unmuteAndPlay,
     playClick,
     playHoloBeam,
     playWarp,
