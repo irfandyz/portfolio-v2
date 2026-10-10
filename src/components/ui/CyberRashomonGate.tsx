@@ -41,7 +41,6 @@ export function CyberRashomonGate({
 }: CyberRashomonGateProps) {
   const [isBreached, setIsBreached] = useState<boolean>(false)
   const [isExited, setIsExited] = useState<boolean>(false)
-  const [isFlashing, setIsFlashing] = useState<boolean>(false)
   const [isShaking, setIsShaking] = useState<boolean>(false)
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -70,14 +69,9 @@ export function CyberRashomonGate({
   const handleBreach = useCallback(() => {
     if (isBreached) return
     setIsBreached(true)
-    setIsFlashing(true)
     setIsShaking(true)
 
-    // Flash and shake cleanup
-    setTimeout(() => {
-      setIsFlashing(false)
-    }, 160)
-
+    // Shake cleanup
     setTimeout(() => {
       setIsShaking(false)
     }, 380)
@@ -377,14 +371,7 @@ export function CyberRashomonGate({
         backgroundColor: isBreached ? 'transparent' : '#05070e',
       }}
     >
-      {/* 1. Flash Shockwave Burst Overlay upon Breach (Behind Canvas z-20) */}
-      <div
-        className={`absolute inset-0 bg-cyan-100 pointer-events-none z-20 transition-opacity duration-150 ${
-          isFlashing ? 'opacity-40' : 'opacity-0'
-        }`}
-      />
-
-      {/* 2. Background Cyber Grid & Vignette (Fades smoothly upon breach) */}
+      {/* Background Cyber Grid & Vignette (Fades smoothly upon breach) */}
       <div
         className={`absolute inset-0 transition-opacity duration-500 pointer-events-none ${
           isBreached ? 'opacity-0' : 'opacity-100'
