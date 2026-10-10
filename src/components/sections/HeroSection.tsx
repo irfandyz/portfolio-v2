@@ -4,9 +4,14 @@ import { ArrowDownRight } from 'lucide-react'
 interface HeroSectionProps {
   playClick: () => void
   scrollToChamber: (index: number) => void
+  isEntered?: boolean
 }
 
-export function HeroSection({ playClick, scrollToChamber }: HeroSectionProps) {
+export function HeroSection({
+  playClick,
+  scrollToChamber,
+  isEntered = false,
+}: HeroSectionProps) {
   return (
     <section
       id="hero"
@@ -20,8 +25,14 @@ export function HeroSection({ playClick, scrollToChamber }: HeroSectionProps) {
         電脳東京建築
       </div>
 
-      {/* Central Content */}
-      <div className="relative z-10 max-w-4xl w-full flex flex-col items-center text-center px-4 sm:px-8 py-8">
+      {/* Central Content (Visible only after entering the gate) */}
+      <div
+        className={`relative z-10 max-w-4xl w-full flex flex-col items-center text-center px-4 sm:px-8 py-8 transition-all duration-1000 ease-out ${
+          isEntered
+            ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 scale-95 translate-y-8 pointer-events-none'
+        }`}
+      >
         {/* Main Name & Title */}
         <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-extrabold tracking-tight text-white mb-4 drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)]">
           <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-pink-200">

@@ -6,6 +6,7 @@ import * as THREE from 'three'
 import { InfiniteCyberGrid } from './InfiniteCyberGrid'
 import { GlobalParticles3D } from './GlobalParticles3D'
 import { ToriiStation3D } from './landmarks/ToriiStation3D'
+import { CyberShrine3D } from './landmarks/CyberShrine3D'
 import { DataCitadel3D } from './landmarks/DataCitadel3D'
 import { HologramStation3D } from './landmarks/HologramStation3D'
 import { ChronoStream3D } from './landmarks/ChronoStream3D'
@@ -15,6 +16,8 @@ import { UplinkBeacon3D } from './landmarks/UplinkBeacon3D'
 
 interface CameraRigProps {
   activeChamber: number
+  isEntered?: boolean
+  isWarping?: boolean
 }
 
 // Camera coordinates & lookAt targets per chamber
@@ -35,11 +38,26 @@ const CHAMBER_CAMERA_CONFIGS = [
   { pos: [0, 0.9, 6.0], lookAt: [0, 0.8, 0] }
 ]
 
-function CameraRig({ activeChamber }: CameraRigProps) {
+function CameraRig({ activeChamber, isEntered = false, isWarping = false }: CameraRigProps) {
   const currentLookAt = useRef(new THREE.Vector3(0, 0.4, 0))
 
   useFrame((state, delta) => {
-    const config = CHAMBER_CAMERA_CONFIGS[activeChamber] || CHAMBER_CAMERA_CONFIGS[0]
+    let config = CHAMBER_CAMERA_CONFIGS[activeChamber] || CHAMBER_CAMERA_CONFIGS[0]
+
+    if (activeChamber === 0) {
+      if (isWarping) {
+        // High-speed warp dive through gate
+        config = { pos: [0, 0.4, 1.8], lookAt: [0, 0.3, -3.0] }
+      } else if (isEntered) {
+        // Inside Sanctuary facing the Cyber Shrine
+        config = { pos: [0, 0.5, 4.6], lookAt: [0, 0.35, 0] }
+      } else {
+        // Initial state: Standing outside facing Torii Gate
+        config = { pos: [0, 0.8, 6.2], lookAt: [0, 0.4, 0] }
+      }
+    }
+
+    const dampSpeed = isWarping ? 7 : 3.5
 
     // Mouse Parallax Offset
     const parallaxX = state.pointer.x * 0.45
@@ -50,18 +68,18 @@ function CameraRig({ activeChamber }: CameraRigProps) {
     const targetZ = config.pos[2]
 
     // Smooth Camera Position Lerping
-    state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, targetX, 3.5, delta)
-    state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, targetY, 3.5, delta)
-    state.camera.position.z = THREE.MathUtils.damp(state.camera.position.z, targetZ, 3.5, delta)
+    state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, targetX, dampSpeed, delta)
+    state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, targetY, dampSpeed, delta)
+    state.camera.position.z = THREE.MathUtils.damp(state.camera.position.z, targetZ, dampSpeed, delta)
 
     // Smooth LookAt Target Lerping
     const targetLookAtX = config.lookAt[0] + parallaxX * 0.3
     const targetLookAtY = config.lookAt[1] + parallaxY * 0.2
     const targetLookAtZ = config.lookAt[2]
 
-    currentLookAt.current.x = THREE.MathUtils.damp(currentLookAt.current.x, targetLookAtX, 4, delta)
-    currentLookAt.current.y = THREE.MathUtils.damp(currentLookAt.current.y, targetLookAtY, 4, delta)
-    currentLookAt.current.z = THREE.MathUtils.damp(currentLookAt.current.z, targetLookAtZ, 4, delta)
+    currentLookAt.current.x = THREE.MathUtils.damp(currentLookAt.current.x, targetLookAtX, dampSpeed + 0.5, delta)
+    currentLookAt.current.y = THREE.MathUtils.damp(currentLookAt.current.y, targetLookAtY, dampSpeed + 0.5, delta)
+    currentLookAt.current.z = THREE.MathUtils.damp(currentLookAt.current.z, targetLookAtZ, dampSpeed + 0.5, delta)
 
     state.camera.lookAt(currentLookAt.current)
   })
@@ -71,9 +89,15 @@ function CameraRig({ activeChamber }: CameraRigProps) {
 
 interface GlobalCyberScene3DProps {
   activeChamber: number
+  isEntered?: boolean
+  isWarping?: boolean
 }
 
-export function GlobalCyberScene3D({ activeChamber }: GlobalCyberScene3DProps) {
+export function GlobalCyberScene3D({
+  activeChamber,
+  isEntered = false,
+  isWarping = false,
+}: GlobalCyberScene3DProps) {
   return (
     <div className="fixed inset-0 w-full h-[100dvh] pointer-events-none z-0">
       <Canvas
@@ -97,7 +121,11 @@ export function GlobalCyberScene3D({ activeChamber }: GlobalCyberScene3DProps) {
 
         <Suspense fallback={null}>
           {/* Dynamic Interpolated Camera Rig */}
-          <CameraRig activeChamber={activeChamber} />
+          <CameraRig
+            activeChamber={activeChamber}
+            isEntered={isEntered}
+            isWarping={isWarping}
+          />
 
           {/* Continuous Cyber Floor Grid */}
           <InfiniteCyberGrid />
@@ -105,8 +133,18 @@ export function GlobalCyberScene3D({ activeChamber }: GlobalCyberScene3DProps) {
           {/* Continuous Floating Data Particle Swarm */}
           <GlobalParticles3D />
 
-          {/* Station 0: Hero Cyber Torii Gate & Kitsune Guardians */}
-          <ToriiStation3D activeChamber={activeChamber} />
+          {/* Station 0A: Hero Cyber Torii Gate & Kitsune Guardians (Outside) */}
+          <ToriiStation3D
+            activeChamber={activeChamber}
+            isEntered={isEntered}
+            isWarping={isWarping}
+          />
+
+          {/* Station 0B: Hero Cyber Shrine (Inner Sanctum) */}
+          <CyberShrine3D
+            activeChamber={activeChamber}
+            isEntered={isEntered}
+          />
 
           {/* Station 1: Operator Dossier Data Citadel Monoliths */}
           <DataCitadel3D activeChamber={activeChamber} />

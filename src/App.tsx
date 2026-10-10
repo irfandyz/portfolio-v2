@@ -11,28 +11,51 @@ import { AcademicSection } from './components/sections/AcademicSection'
 import { ServicesSection } from './components/sections/ServicesSection'
 import { ContactSection } from './components/sections/ContactSection'
 
+import { useState } from 'react'
 import { CyberCursor } from './components/ui/CyberCursor'
-import { CyberRashomonGate } from './components/ui/CyberRashomonGate'
+import { GateIntroPrompt } from './components/ui/GateIntroPrompt'
 
 export function App() {
   const { isMuted, toggleMute, unmuteAndPlay, playClick, playHoloBeam, playWarp, volume, setVolume, trackTitle, nextTrack } = useAudio()
   const { activeChamber, containerRef, scrollToChamber } = useScrollSnap()
 
+  const [isEntered, setIsEntered] = useState<boolean>(false)
+  const [isWarping, setIsWarping] = useState<boolean>(false)
+
+  const handleEnter = () => {
+    if (isEntered || isWarping) return
+    setIsWarping(true)
+    playClick()
+    playWarp()
+    playHoloBeam()
+    unmuteAndPlay()
+
+    // Smooth warp dive transition through the Torii gate into the inner shrine
+    setTimeout(() => {
+      setIsWarping(false)
+      setIsEntered(true)
+    }, 1200)
+  }
+
   return (
     <div className="relative w-screen h-[100dvh] overflow-hidden bg-[#07080d] text-slate-100 font-sans select-none">
-      {/* Cyber Rashomon Particle Breach Entrance */}
-      <CyberRashomonGate
-        onOpen={unmuteAndPlay}
-        playClick={playClick}
-        playHoloBeam={playHoloBeam}
-        playWarp={playWarp}
-      />
+      {/* 3D Gate Entrance Prompt (Active before entering) */}
+      {!isEntered && (
+        <GateIntroPrompt
+          onEnter={handleEnter}
+          isWarping={isWarping}
+        />
+      )}
 
       {/* Sci-Fi Crosshair Cursor on Desktop */}
       <CyberCursor />
 
-      {/* Unified Continuous 3D World (Fixed across all 7 Chambers) */}
-      <GlobalCyberScene3D activeChamber={activeChamber} />
+      {/* Unified Continuous 3D World (Fixed across all Chambers) */}
+      <GlobalCyberScene3D
+        activeChamber={activeChamber}
+        isEntered={isEntered}
+        isWarping={isWarping}
+      />
 
       {/* Background Cyber Ambient CRT Scanline Grid */}
       <div className="fixed inset-0 cyber-scanline pointer-events-none z-20 opacity-35" />
@@ -48,21 +71,29 @@ export function App() {
         nextTrack={nextTrack}
       />
 
-      {/* Side Vertical Radar Navigation */}
-      <SideRadar
-        activeChamber={activeChamber}
-        scrollToChamber={scrollToChamber}
-        playClick={playClick}
-      />
+      {/* Side Vertical Radar Navigation (Revealed when entered) */}
+      <div className={`transition-opacity duration-1000 ${isEntered ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <SideRadar
+          activeChamber={activeChamber}
+          scrollToChamber={scrollToChamber}
+          playClick={playClick}
+        />
+      </div>
 
       {/* Main Fullscreen Scroll-Snap Container (100dvh 7 Chambers) */}
       <main
         ref={containerRef}
-        className="h-[100dvh] w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth relative z-10 focus:outline-none"
+        className={`h-[100dvh] w-full snap-y snap-mandatory scroll-smooth relative z-10 focus:outline-none ${
+          isEntered ? 'overflow-y-scroll' : 'overflow-hidden pointer-events-none'
+        }`}
         tabIndex={0}
       >
-        {/* Chamber 01: Hero // Cyber Gateway */}
-        <HeroSection playClick={playClick} scrollToChamber={scrollToChamber} />
+        {/* Chamber 01: Hero // Inner Cyber Shrine Sanctuary */}
+        <HeroSection
+          playClick={playClick}
+          scrollToChamber={scrollToChamber}
+          isEntered={isEntered}
+        />
 
         {/* Chamber 02: Operator Dossier // Identity & Tech Matrix */}
         <DossierSection playClick={playClick} />
