@@ -154,18 +154,10 @@ export function CyberKitsune({
           <boxGeometry args={[0.3, 0.06, 0.12]} />
         </mesh>
 
-        {/* Sacred Relic in Chest / Mouth */}
-        {isLeft ? (
-          <group position={[0, 0.42, 0.25]} rotation={[0, 0, 0.3]}>
-            <mesh material={spiritOrbMaterial}>
-              <cylinderGeometry args={[0.045, 0.045, 0.32, 12]} />
-            </mesh>
-          </group>
-        ) : (
-          <mesh position={[0, 0.44, 0.24]} material={spiritOrbMaterial}>
-            <octahedronGeometry args={[0.08, 0]} />
-          </mesh>
-        )}
+        {/* Sacred Relic Gem in Chest */}
+        <mesh position={[0, 0.44, 0.24]} material={spiritOrbMaterial}>
+          <octahedronGeometry args={[0.08, 0]} />
+        </mesh>
 
         {/* Head & Muzzle */}
         <group position={[0, 0.76, 0.12]} rotation={[-0.05, 0, 0]}>
