@@ -2,6 +2,7 @@ export interface ProjectItem {
   id: string
   code: string
   title: string
+  shortTitle: string
   client: string
   year: string
   category: 'Full Stack' | 'Backend' | 'Frontend'
@@ -77,6 +78,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     id: 'tms',
     code: 'PRJ-01 // TMS-LOGISTICS',
     title: 'Transportation Management System (TMS)',
+    shortTitle: 'TMS Logistics',
     client: 'PT. Arkadaya Hakato Persada',
     year: '2025',
     category: 'Full Stack',
@@ -90,15 +92,15 @@ export const PROJECTS_DATA: ProjectItem[] = [
     ],
     techStack: ['Laravel', 'Vue.js 3', 'Tailwind CSS', 'MySQL', 'GPS Telemetry'],
     imageMockup: `${BASE}projects/tms.png`,
-    liveUrl: 'https://irfandyaziz.com',
     githubUrl: 'https://github.com/irfandyz'
   },
   {
     id: 'navaneva-erp',
     code: 'PRJ-02 // NAVANEVA-ERP',
     title: 'Navaneva ERP (SCM & Finance)',
+    shortTitle: 'Navaneva ERP',
     client: 'Enterprise Systems',
-    year: '2025',
+    year: '2026',
     category: 'Full Stack',
     status: 'PRODUCTION ● CLOUD ERP',
     summary: 'Sistem ERP berbasis web terintegrasi yang berfokus pada Supply Chain Management (SCM) dan manajemen keuangan korporat, mencakup pengadaan barang (procurement), inventori multi-gudang, penagihan, serta pelaporan cash flow dan laba rugi real-time.',
@@ -116,6 +118,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     id: 'si-app',
     code: 'PRJ-03 // SI-MEDIA-ECOSYSTEM',
     title: 'Sekolah Iklan App (SI APP)',
+    shortTitle: 'SI App',
     client: 'Sekolah Iklan Indonesia',
     year: '2023',
     category: 'Backend',
@@ -135,6 +138,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     id: 'hrms',
     code: 'PRJ-04 // HRMS-BIOMETRIC',
     title: 'Human Resource Management System (HRMS)',
+    shortTitle: 'HRMS Biometric',
     client: 'Enterprise Systems',
     year: '2022',
     category: 'Backend',
@@ -154,6 +158,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     id: 'school-admin',
     code: 'PRJ-05 // EDU-INFRA-SYS',
     title: 'Infrastruktur & Administrasi Sekolah Terpadu',
+    shortTitle: 'Edu Infra',
     client: 'Yayasan Pendidikan',
     year: '2023',
     category: 'Full Stack',
@@ -173,6 +178,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     id: 'mandiri-cipta',
     code: 'PRJ-06 // EXPORT-SHOWCASE',
     title: 'Website Profil CV. Mandiri Cipta Adikarya',
+    shortTitle: 'Mandiri Cipta',
     client: 'CV. Mandiri Cipta Adikarya',
     year: '2024',
     category: 'Full Stack',
@@ -186,12 +192,12 @@ export const PROJECTS_DATA: ProjectItem[] = [
     ],
     techStack: ['Laravel', 'MySQL', 'Bootstrap', 'SEO Metadata'],
     imageMockup: `${BASE}projects/mandiri_cipta_adikarya.png`,
-    liveUrl: 'https://irfandyaziz.com'
   },
   {
     id: 'portfolio-v2',
     code: 'PRJ-07 // CYBER-DECK-V2',
     title: 'Personal Portfolio Cyber 3D Deck',
+    shortTitle: 'Cyber Deck 3D',
     client: 'Self Project',
     year: '2026',
     category: 'Frontend',
@@ -205,7 +211,6 @@ export const PROJECTS_DATA: ProjectItem[] = [
     ],
     techStack: ['React', 'Three.js', 'React Three Fiber', 'Tailwind CSS', 'TypeScript'],
     imageMockup: `${BASE}projects/portfolio.png`,
-    liveUrl: 'https://irfandyaziz.com',
     githubUrl: 'https://github.com/irfandyz'
   }
 ]
