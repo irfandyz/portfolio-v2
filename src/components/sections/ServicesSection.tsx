@@ -45,22 +45,22 @@ export function ServicesSection({ playClick, scrollToChamber }: ServicesSectionP
         </div>
 
         {/* 6 Services Cyber Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 max-h-[73dvh] overflow-y-auto cyber-scrollbar pr-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-max gap-3 sm:gap-4 max-h-[80dvh] sm:max-h-[75dvh] overflow-y-auto cyber-scrollbar pr-1 sm:pr-2 py-1">
           {SERVICES_DATA.map((service, idx) => {
             const Icon = SERVICE_ICONS[idx % SERVICE_ICONS.length]
             return (
               <div
                 key={service.id}
                 onClick={handleInquireService}
-                className="cyber-glass rounded-xl p-4 md:p-5 border-cyan-500/20 hover:border-cyan-400/70 bg-[#090c17]/90 hover:bg-[#0d1222] transition-all duration-300 flex flex-col justify-between group cursor-pointer relative overflow-hidden"
+                className="cyber-glass rounded-xl p-3.5 sm:p-5 border-cyan-500/20 hover:border-cyan-400/70 bg-[#090c17]/90 hover:bg-[#0d1222] transition-all duration-300 flex flex-col justify-between group cursor-pointer relative min-h-[165px] sm:min-h-[190px] h-auto shrink-0"
               >
                 {/* Top Subtle Accent Strip on Hover */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity" />
 
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="w-9 h-9 rounded-lg bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-110 group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all">
-                      <Icon className="w-5 h-5 text-cyan-400" />
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-110 group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all">
+                      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
                     </div>
                     <div className="flex items-center gap-1.5">
                       <span className="text-[10px] font-tech text-slate-500 group-hover:text-cyan-400 transition-colors">
@@ -70,20 +70,20 @@ export function ServicesSection({ playClick, scrollToChamber }: ServicesSectionP
                     </div>
                   </div>
 
-                  <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-cyan-300 transition-colors mb-2 leading-snug">
+                  <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-cyan-300 transition-colors mb-1.5 leading-snug">
                     {service.title}
                   </h3>
 
-                  <p className="text-xs text-slate-300 font-light leading-relaxed mb-4">
+                  <p className="text-[11px] sm:text-xs text-slate-300 font-light leading-relaxed mb-3">
                     {service.description}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-slate-800/80 flex flex-wrap gap-1.5">
+                <div className="pt-2.5 sm:pt-3 border-t border-slate-800/80 flex flex-wrap gap-1.5">
                   {service.skills.map((skill) => (
                     <span 
                       key={skill}
-                      className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-tech text-cyan-400/80 group-hover:border-cyan-500/30 transition-colors"
+                      className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[9px] sm:text-[10px] font-tech text-cyan-400/80 group-hover:border-cyan-500/30 transition-colors"
                     >
                       {skill}
                     </span>
