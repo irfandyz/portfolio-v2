@@ -25,22 +25,42 @@ export function HeroSection({
         電脳東京建築
       </div>
 
-      {/* Central Content (Visible only after entering the gate) */}
-      <div
-        className={`relative z-10 max-w-4xl w-full flex flex-col items-center text-center px-4 sm:px-8 py-8 transition-all duration-1000 ease-out ${
-          isEntered
-            ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
-            : 'opacity-0 scale-95 translate-y-8 pointer-events-none'
-        }`}
-      >
-        {/* Main Name & Title */}
-        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-extrabold tracking-tight text-white mb-4 drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)]">
+      {/* Central Content Container */}
+      <div className="relative z-10 max-w-4xl w-full flex flex-col items-center text-center px-4 sm:px-8 py-8">
+        
+        {/* Step 1: System Status Terminal Badge (Delay 150ms) */}
+        <div
+          className={`flex items-center gap-2.5 px-3.5 py-1 mb-5 rounded-full border border-cyan-400/40 bg-[#070b16]/80 backdrop-blur-md text-[10px] sm:text-xs font-tech text-cyan-300 tracking-[0.25em] shadow-[0_0_15px_rgba(0,240,255,0.25)] transition-all duration-700 ease-out ${
+            isEntered
+              ? 'opacity-100 translate-y-0 scale-100 delay-[150ms]'
+              : 'opacity-0 -translate-y-4 scale-95 pointer-events-none'
+          }`}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+          <span>NEURAL ARCHIVE // IDENTITY SYNCED</span>
+        </div>
+
+        {/* Step 2: Main Name with Holographic Glow (Delay 350ms) */}
+        <h1
+          className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-extrabold tracking-tight text-white mb-4 drop-shadow-[0_4px_28px_rgba(0,0,0,0.95)] transition-all duration-800 ease-out ${
+            isEntered
+              ? 'opacity-100 translate-y-0 filter blur-0 delay-[350ms]'
+              : 'opacity-0 translate-y-6 filter blur-[4px] pointer-events-none'
+          }`}
+        >
           <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-pink-200">
             {OPERATOR_PROFILE.name}
           </span>
         </h1>
 
-        <div className="flex items-center justify-center gap-3 mb-6 text-sm sm:text-base md:text-lg font-tech text-cyan-400 tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+        {/* Step 3: Subtitle Matrix & Roles (Delay 550ms) */}
+        <div
+          className={`flex items-center justify-center gap-3 mb-6 text-sm sm:text-base md:text-lg font-tech text-cyan-400 tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] transition-all duration-700 ease-out ${
+            isEntered
+              ? 'opacity-100 translate-y-0 delay-[550ms]'
+              : 'opacity-0 translate-y-5 pointer-events-none'
+          }`}
+        >
           <span className="text-slate-500">//</span>
           <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-cyan-100">
             FULL-STACK SYSTEM ARCHITECT
@@ -51,19 +71,31 @@ export function HeroSection({
           </span>
         </div>
 
-        {/* Philosophy Callout */}
-        <p className="max-w-2xl text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed mb-8 font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+        {/* Step 4: Philosophy / Mission Statement (Delay 750ms) */}
+        <p
+          className={`max-w-2xl text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed mb-8 font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)] transition-all duration-700 ease-out ${
+            isEntered
+              ? 'opacity-100 translate-y-0 delay-[750ms]'
+              : 'opacity-0 translate-y-4 pointer-events-none'
+          }`}
+        >
           {OPERATOR_PROFILE.philosophy}
         </p>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-4">
+        {/* Step 5: Interactive Action Button (Delay 950ms) */}
+        <div
+          className={`flex flex-col sm:flex-row items-center gap-4 transition-all duration-700 ease-out ${
+            isEntered
+              ? 'opacity-100 scale-100 translate-y-0 delay-[950ms] pointer-events-auto'
+              : 'opacity-0 scale-90 translate-y-4 pointer-events-none'
+          }`}
+        >
           <button
             onClick={() => {
               playClick()
               scrollToChamber(1) // Jump to Operator Dossier / Next Chamber
             }}
-            className="w-full sm:w-auto px-8 py-3.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold tracking-wider text-xs sm:text-sm font-tech flex items-center justify-center gap-2.5 shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all cursor-pointer"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold tracking-wider text-xs sm:text-sm font-tech flex items-center justify-center gap-2.5 shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all cursor-pointer hover:scale-105 active:scale-95"
           >
             <span>GET STARTED</span>
             <ArrowDownRight className="w-4 h-4" />
