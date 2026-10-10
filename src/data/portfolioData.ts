@@ -49,7 +49,6 @@ export const OPERATOR_PROFILE = {
   role: 'Full-stack Developer / IT Developer',
   kanjiTitle: '電脳開発者 // フルスタック',
   avatar: `${BASE}profile.png`,
-  philosophy: 'Clean Code, Scalability, & User-Centric Experience',
   status: 'AVAILABLE FOR HIRE',
   location: 'Cirebon, Indonesia',
   contacts: {
