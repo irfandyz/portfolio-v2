@@ -39,20 +39,20 @@ export function ShowcaseSection({ playClick, playHoloBeam }: ShowcaseSectionProp
     <>
       <section 
         id="showcase"
-        className="relative w-full h-[100dvh] flex items-center justify-center snap-start snap-always overflow-hidden px-4 md:px-12 py-6 md:py-8"
+        className="relative w-full h-[100dvh] flex items-center justify-center snap-start snap-always overflow-hidden px-3 sm:px-6 md:px-12 py-3 sm:py-6 md:py-8"
       >
 
         <div className="relative z-10 max-w-6xl w-full h-full flex flex-col justify-center">
           {/* Section Header */}
-          <div className="flex items-center justify-between mb-3 md:mb-5">
+          <div className="flex items-center justify-between mb-2 sm:mb-3 md:mb-5 shrink-0">
             <div>
-              <div className="text-[11px] font-tech text-cyan-400 tracking-widest flex items-center gap-2">
+              <div className="text-[10px] sm:text-[11px] font-tech text-cyan-400 tracking-widest flex items-center gap-1.5 sm:gap-2">
                 <span>// PROTOCOL 03</span>
                 <span className="text-slate-600">•</span>
                 <span className="text-slate-400">CENTRAL HOLOGRAM CHAMBER</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-extrabold text-white">
-                Enterprise Systems <span className="font-kanji text-cyan-400/80 text-xl font-normal">[案件投射体]</span>
+              <h2 className="text-xl sm:text-3xl md:text-4xl font-display font-extrabold text-white">
+                Enterprise Systems <span className="font-kanji text-cyan-400/80 text-base sm:text-xl font-normal">[案件投射体]</span>
               </h2>
             </div>
             <div className="hidden sm:flex items-center gap-3">
@@ -63,24 +63,26 @@ export function ShowcaseSection({ playClick, playHoloBeam }: ShowcaseSectionProp
           </div>
 
           {/* Central Holographic Projector Pod */}
-          <div className="relative cyber-glass rounded-2xl border-cyan-500/30 bg-[#080b14]/90 p-4 md:p-6 shadow-[0_0_50px_rgba(0,240,255,0.18)] flex-1 max-h-[70dvh] flex flex-col justify-between overflow-hidden">
+          <div className="relative cyber-glass rounded-2xl border-cyan-500/30 bg-[#080b14]/90 p-3 sm:p-5 md:p-6 shadow-[0_0_50px_rgba(0,240,255,0.18)] flex-1 max-h-[85dvh] sm:max-h-[80dvh] lg:max-h-[72dvh] flex flex-col justify-between overflow-hidden">
             {/* Top Scanline Line */}
             <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-pulse" />
 
-            {/* Project Details Grid */}
-            <div 
-              className={`grid grid-cols-1 lg:grid-cols-12 gap-5 items-center transition-all duration-300 ${
-                isTransitioning ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'
-              }`}
-            >
-              {/* Left Col: Holographic Mockup Screen (7 cols) */}
-              <div className="lg:col-span-7 relative group">
-                <div className="relative rounded-xl overflow-hidden border border-cyan-400/40 bg-black/60 shadow-[0_0_30px_rgba(0,240,255,0.2)] aspect-video max-h-[36dvh] lg:max-h-[42dvh] w-full flex items-center justify-center">
-                  <img 
-                    src={activeProject.imageMockup} 
-                    alt={activeProject.title}
-                    className="w-full h-full object-cover object-top opacity-90 group-hover:scale-105 transition-transform duration-700" 
-                  />
+            {/* Scrollable Project Details Container on Compact / Mobile Screens */}
+            <div className="flex-1 min-h-0 overflow-y-auto cyber-scrollbar pr-1 sm:pr-2 pb-2">
+              {/* Project Details Grid */}
+              <div 
+                className={`grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 lg:gap-5 items-start lg:items-center py-0.5 transition-all duration-300 ${
+                  isTransitioning ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'
+                }`}
+              >
+                {/* Left Col: Holographic Mockup Screen (7 cols) */}
+                <div className="lg:col-span-7 relative group">
+                  <div className="relative rounded-xl overflow-hidden border border-cyan-400/40 bg-black/60 shadow-[0_0_30px_rgba(0,240,255,0.2)] aspect-video max-h-[19dvh] sm:max-h-[26dvh] lg:max-h-[42dvh] w-full flex items-center justify-center">
+                    <img 
+                      src={activeProject.imageMockup} 
+                      alt={activeProject.title}
+                      className="w-full h-full object-cover object-top opacity-90 group-hover:scale-105 transition-transform duration-700" 
+                    />
                   {/* CRT Scanline Overlay */}
                   <div className="absolute inset-0 cyber-scanline opacity-40 pointer-events-none" />
                   
@@ -91,7 +93,7 @@ export function ShowcaseSection({ playClick, playHoloBeam }: ShowcaseSectionProp
                   <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-cyan-400" />
 
                   {/* Badge Status */}
-                  <div className="absolute top-3 left-3 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md border border-emerald-500/40 text-[10px] font-tech text-emerald-400 font-semibold flex items-center gap-1.5">
+                  <div className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md border border-emerald-500/40 text-[9px] sm:text-[10px] font-tech text-emerald-400 font-semibold flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                     <span>{activeProject.status}</span>
                   </div>
@@ -106,30 +108,30 @@ export function ShowcaseSection({ playClick, playHoloBeam }: ShowcaseSectionProp
               </div>
 
               {/* Right Col: Specifications & Architecture (5 cols) */}
-              <div className="lg:col-span-5 flex flex-col justify-between space-y-3">
+              <div className="lg:col-span-5 flex flex-col justify-between space-y-2 sm:space-y-3">
                 <div>
-                  <div className="flex items-center gap-2 text-xs font-tech text-pink-400 mb-1">
+                  <div className="flex items-center gap-2 text-[11px] sm:text-xs font-tech text-pink-400 mb-0.5 sm:mb-1">
                     <span>{activeProject.code}</span>
                     <span className="text-slate-600">•</span>
                     <span className="text-slate-400">{activeProject.client} ({activeProject.year})</span>
                   </div>
 
-                  <h3 className="text-xl sm:text-2xl font-bold font-display text-white mb-2 leading-snug">
+                  <h3 className="text-lg sm:text-2xl font-bold font-display text-white mb-1.5 leading-snug">
                     {activeProject.title}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed mb-3">
+                  <p className="text-[11px] sm:text-sm text-slate-300 font-light leading-relaxed mb-2 sm:mb-3">
                     {activeProject.summary}
                   </p>
 
                   {/* Key Architectural Highlights */}
-                  <div className="space-y-1.5 mb-3.5">
-                    <div className="text-[11px] font-tech text-cyan-400 uppercase tracking-wider font-semibold">
+                  <div className="space-y-1 mb-2.5 sm:mb-3.5">
+                    <div className="text-[10px] sm:text-[11px] font-tech text-cyan-400 uppercase tracking-wider font-semibold">
                       // KEY ARCHITECTURAL FEATURES:
                     </div>
                     {activeProject.highlights.map((highlight, i) => (
-                      <div key={i} className="flex items-start gap-2 text-xs text-slate-300">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                      <div key={i} className="flex items-start gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-slate-300">
+                        <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-cyan-400 shrink-0 mt-0.5" />
                         <span>{highlight}</span>
                       </div>
                     ))}
@@ -193,27 +195,28 @@ export function ShowcaseSection({ playClick, playHoloBeam }: ShowcaseSectionProp
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Bottom Dock: Selector Thumbnails & Prev/Next Controls */}
-            <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
+            {/* Bottom Dock: Selector Thumbnails & Prev/Next Controls (Always Pinned & Fully Visible) */}
+            <div className="shrink-0 pt-2 sm:pt-3 border-t border-slate-800/80 flex items-center justify-between gap-1.5 sm:gap-3 bg-[#080b14]/95">
               <button
                 onClick={() => {
                   playClick()
                   handlePrev()
                 }}
-                className="p-2 rounded-lg bg-slate-900/80 hover:bg-cyan-950 border border-slate-800 hover:border-cyan-400 text-slate-300 hover:text-cyan-300 transition-all cursor-pointer flex items-center gap-1 text-xs font-tech"
+                className="p-1.5 sm:p-2 rounded-lg bg-slate-900/80 hover:bg-cyan-950 border border-slate-800 hover:border-cyan-400 text-slate-300 hover:text-cyan-300 transition-all cursor-pointer flex items-center gap-1 text-[11px] sm:text-xs font-tech"
               >
-                <ChevronLeft className="w-4 h-4 text-cyan-400" />
+                <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400" />
                 <span className="hidden sm:inline">PREV_SYS</span>
               </button>
 
               {/* Thumbnails Mini Switcher */}
-              <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto py-1">
+              <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto py-0.5 cyber-scrollbar max-w-[200px] sm:max-w-none">
                 {PROJECTS_DATA.map((proj, idx) => (
                   <button
                     key={proj.id}
                     onClick={() => handleSelectProject(idx)}
-                    className={`px-2 py-1 rounded text-[10px] font-tech tracking-wider border transition-all cursor-pointer whitespace-nowrap ${
+                    className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-[9px] sm:text-[10px] font-tech tracking-wider border transition-all cursor-pointer whitespace-nowrap ${
                       currentIndex === idx
                         ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(0,240,255,0.4)]'
                         : 'bg-slate-900/50 border-slate-800 text-slate-500 hover:text-slate-300 hover:border-slate-700'
@@ -230,10 +233,10 @@ export function ShowcaseSection({ playClick, playHoloBeam }: ShowcaseSectionProp
                   playClick()
                   handleNext()
                 }}
-                className="p-2 rounded-lg bg-slate-900/80 hover:bg-cyan-950 border border-slate-800 hover:border-cyan-400 text-slate-300 hover:text-cyan-300 transition-all cursor-pointer flex items-center gap-1 text-xs font-tech"
+                className="p-1.5 sm:p-2 rounded-lg bg-slate-900/80 hover:bg-cyan-950 border border-slate-800 hover:border-cyan-400 text-slate-300 hover:text-cyan-300 transition-all cursor-pointer flex items-center gap-1 text-[11px] sm:text-xs font-tech"
               >
                 <span className="hidden sm:inline">NEXT_SYS</span>
-                <ChevronRight className="w-4 h-4 text-cyan-400" />
+                <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400" />
               </button>
             </div>
           </div>
