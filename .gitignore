@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Planning & Documentation (Local Only)
+ROADMAP.md
+PLANNING.md
+portfolio.md
