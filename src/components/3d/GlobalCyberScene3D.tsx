@@ -140,10 +140,11 @@ export function GlobalCyberScene3D({
             isWarping={isWarping}
           />
 
-          {/* Station 0B: Hero Cyber Shrine (Inner Sanctum) */}
+          {/* Station 0B: Hero Cyber Shrine (Inner Sanctum - Approaching from distance) */}
           <CyberShrine3D
             activeChamber={activeChamber}
             isEntered={isEntered}
+            isWarping={isWarping}
           />
 
           {/* Station 1: Operator Dossier Data Citadel Monoliths */}

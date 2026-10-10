@@ -5,9 +5,14 @@ import * as THREE from 'three'
 interface CyberShrine3DProps {
   activeChamber: number
   isEntered: boolean
+  isWarping?: boolean
 }
 
-export function CyberShrine3D({ activeChamber, isEntered }: CyberShrine3DProps) {
+export function CyberShrine3D({
+  activeChamber,
+  isEntered,
+  isWarping = false,
+}: CyberShrine3DProps) {
   const groupRef = useRef<THREE.Group>(null)
   const innerLightRef = useRef<THREE.PointLight>(null)
   const lanternsRef = useRef<THREE.Group>(null)
@@ -26,22 +31,51 @@ export function CyberShrine3D({ activeChamber, isEntered }: CyberShrine3DProps) 
 
   useFrame((state, delta) => {
     if (!groupRef.current) return
-    const isActive = isEntered && activeChamber === 0
-    const targetScale = isActive ? 1.0 : 0.001
-    const targetZ = isActive ? 0.0 : 4.0
-    const targetY = isActive ? -0.2 : -2.0
 
-    groupRef.current.scale.x = THREE.MathUtils.damp(groupRef.current.scale.x, targetScale, 4, delta)
-    groupRef.current.scale.y = THREE.MathUtils.damp(groupRef.current.scale.y, targetScale, 4, delta)
-    groupRef.current.scale.z = THREE.MathUtils.damp(groupRef.current.scale.z, targetScale, 4, delta)
-    groupRef.current.position.z = THREE.MathUtils.damp(groupRef.current.position.z, targetZ, 4, delta)
-    groupRef.current.position.y = THREE.MathUtils.damp(groupRef.current.position.y, targetY, 4, delta)
+    let targetScale = 1.0
+    let targetZ = 0.0
+    let targetY = -0.2
+    let dampSpeed = 3.5
+
+    if (activeChamber === 0) {
+      if (isWarping) {
+        // Approaching rapidly from deep background towards camera!
+        targetZ = 0.0
+        targetScale = 1.0
+        targetY = -0.2
+        dampSpeed = 4.2
+      } else if (isEntered) {
+        // Sits majestic in front of camera in Hero section
+        targetZ = 0.0
+        targetScale = 1.0
+        targetY = -0.2
+        dampSpeed = 3.5
+      } else {
+        // Initial state before entering: Placed far in the deep distance behind fog!
+        targetZ = -18.0
+        targetScale = 0.35
+        targetY = -0.1
+        dampSpeed = 2.0
+      }
+    } else {
+      // Chamber 1..6 navigation: flies forward past camera
+      targetZ = 4.0
+      targetScale = 0.001
+      targetY = -1.5
+      dampSpeed = 4.0
+    }
+
+    groupRef.current.scale.x = THREE.MathUtils.damp(groupRef.current.scale.x, targetScale, dampSpeed, delta)
+    groupRef.current.scale.y = THREE.MathUtils.damp(groupRef.current.scale.y, targetScale, dampSpeed, delta)
+    groupRef.current.scale.z = THREE.MathUtils.damp(groupRef.current.scale.z, targetScale, dampSpeed, delta)
+    groupRef.current.position.z = THREE.MathUtils.damp(groupRef.current.position.z, targetZ, dampSpeed, delta)
+    groupRef.current.position.y = THREE.MathUtils.damp(groupRef.current.position.y, targetY, dampSpeed, delta)
 
     groupRef.current.visible = groupRef.current.scale.x > 0.05
 
     // Subtle gentle floating breathing animation
     const time = state.clock.getElapsedTime()
-    if (isActive) {
+    if (activeChamber === 0 && isEntered) {
       groupRef.current.position.y = targetY + Math.sin(time * 1.2) * 0.05
       // Mouse tilt parallax
       const targetRotY = state.pointer.x * 0.25
@@ -116,7 +150,7 @@ export function CyberShrine3D({ activeChamber, isEntered }: CyberShrine3DProps) 
   )
 
   return (
-    <group ref={groupRef} position={[0, -0.2, 0]}>
+    <group ref={groupRef} position={[0, -0.1, -18.0]} scale={[0.35, 0.35, 0.35]}>
       {/* 1. Stone Foundation Plinth & Steps */}
       <mesh position={[0, -0.4, 0]} material={stonePlinth}>
         <boxGeometry args={[3.2, 0.2, 3.2]} />
