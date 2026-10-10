@@ -108,7 +108,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Multi-Warehouse Inventory Tracking with Automated Stock Reconciliation',
       'Decoupled Architecture: High-Performance React SPA & Scalable Laravel Backend'
     ],
-    techStack: ['React', 'Laravel', 'REST API', 'MySQL', 'Tailwind CSS', 'SCM & Finance'],
+    techStack: ['React', 'Laravel', 'REST API', 'PostgreSQL', 'Tailwind CSS', 'SCM & Finance'],
     imageMockup: `${BASE}projects/navaneva.png`,
     githubUrl: 'https://github.com/irfandyz'
   },
