@@ -11,7 +11,7 @@ import { AcademicSection } from './components/sections/AcademicSection'
 import { ServicesSection } from './components/sections/ServicesSection'
 import { ContactSection } from './components/sections/ContactSection'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { CyberCursor } from './components/ui/CyberCursor'
 import { GateIntroPrompt } from './components/ui/GateIntroPrompt'
 
@@ -21,6 +21,13 @@ export function App() {
 
   const [isEntered, setIsEntered] = useState<boolean>(false)
   const [isWarping, setIsWarping] = useState<boolean>(false)
+
+  // Guarantee container scroll stays at Chamber 0 (top) before entering gate
+  useEffect(() => {
+    if (!isEntered && containerRef.current) {
+      containerRef.current.scrollTop = 0
+    }
+  }, [isEntered, containerRef])
 
   const handleEnter = () => {
     if (isEntered || isWarping) return
@@ -52,7 +59,7 @@ export function App() {
 
       {/* Unified Continuous 3D World (Fixed across all Chambers) */}
       <GlobalCyberScene3D
-        activeChamber={activeChamber}
+        activeChamber={isEntered ? activeChamber : 0}
         isEntered={isEntered}
         isWarping={isWarping}
       />

@@ -42,9 +42,11 @@ function CameraRig({ activeChamber, isEntered = false, isWarping = false }: Came
   const currentLookAt = useRef(new THREE.Vector3(0, 0.4, 0))
 
   useFrame((state, delta) => {
-    let config = CHAMBER_CAMERA_CONFIGS[activeChamber] || CHAMBER_CAMERA_CONFIGS[0]
+    // When not entered, always lock camera strictly to Torii Gate (Chamber 0)
+    const chamber = isEntered ? activeChamber : 0
+    let config = CHAMBER_CAMERA_CONFIGS[chamber] || CHAMBER_CAMERA_CONFIGS[0]
 
-    if (activeChamber === 0) {
+    if (chamber === 0) {
       if (isWarping) {
         // Walking pace forward through the gate
         config = { pos: [0, 0.5, 3.5], lookAt: [0, 0.35, -3.5] }
@@ -98,6 +100,9 @@ export function GlobalCyberScene3D({
   isEntered = false,
   isWarping = false,
 }: GlobalCyberScene3DProps) {
+  // Landmarks should only be active once inside the experience
+  const effectiveChamber = isEntered ? activeChamber : 0
+
   return (
     <div className="fixed inset-0 w-full h-[100dvh] pointer-events-none z-0">
       <Canvas
@@ -122,7 +127,7 @@ export function GlobalCyberScene3D({
         <Suspense fallback={null}>
           {/* Dynamic Interpolated Camera Rig */}
           <CameraRig
-            activeChamber={activeChamber}
+            activeChamber={effectiveChamber}
             isEntered={isEntered}
             isWarping={isWarping}
           />
@@ -135,35 +140,35 @@ export function GlobalCyberScene3D({
 
           {/* Station 0A: Hero Cyber Torii Gate & Kitsune Guardians (Outside) */}
           <ToriiStation3D
-            activeChamber={activeChamber}
+            activeChamber={effectiveChamber}
             isEntered={isEntered}
             isWarping={isWarping}
           />
 
           {/* Station 0B: Hero Cyber Shrine (Inner Sanctum - Approaching from distance) */}
           <CyberShrine3D
-            activeChamber={activeChamber}
+            activeChamber={effectiveChamber}
             isEntered={isEntered}
             isWarping={isWarping}
           />
 
           {/* Station 1: Operator Dossier Data Citadel Monoliths */}
-          <DataCitadel3D activeChamber={activeChamber} />
+          <DataCitadel3D activeChamber={effectiveChamber} />
 
           {/* Station 2: Project Showcase Hologram Pedestal Laser Rings */}
-          <HologramStation3D activeChamber={activeChamber} />
+          <HologramStation3D activeChamber={effectiveChamber} />
 
           {/* Station 3: Career Chrono-Stream Warp Rails */}
-          <ChronoStream3D activeChamber={activeChamber} />
+          <ChronoStream3D activeChamber={effectiveChamber} />
 
           {/* Station 4: Academic Neural Lattice Circuit Bridge */}
-          <NeuralLattice3D activeChamber={activeChamber} />
+          <NeuralLattice3D activeChamber={effectiveChamber} />
 
           {/* Station 5: Capabilities Hexagonal Modular Cluster */}
-          <CapabilitiesCluster3D activeChamber={activeChamber} />
+          <CapabilitiesCluster3D activeChamber={effectiveChamber} />
 
           {/* Station 6: Direct Uplink Cyber Beacon */}
-          <UplinkBeacon3D activeChamber={activeChamber} />
+          <UplinkBeacon3D activeChamber={effectiveChamber} />
 
           {/* Single Unified Post-Processing Pipeline (60 FPS) */}
           <EffectComposer multisampling={0}>

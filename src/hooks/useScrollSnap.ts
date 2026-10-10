@@ -50,6 +50,13 @@ export function useScrollSnap() {
     }
   }, [activeChamber, scrollToChamber])
 
+  // Set scrollRestoration to manual so reloads start at top
+  useEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual'
+    }
+  }, [])
+
   // Observer to track visible section during manual wheel / touch scrolling
   useEffect(() => {
     const container = containerRef.current

@@ -40,7 +40,7 @@ export function HologramStation3D({ activeChamber }: HologramStation3DProps) {
   })
 
   return (
-    <group ref={groupRef} position={[0, -1.8, 0]} rotation={[0.4, 0, 0]}>
+    <group ref={groupRef} position={[0, -1.8, 0]} rotation={[0.4, 0, 0]} scale={0.001} visible={false}>
       {/* Outer Ring */}
       <mesh ref={ring1Ref} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[2.5, 2.56, 64]} />
