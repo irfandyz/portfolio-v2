@@ -115,28 +115,8 @@ export const PROJECTS_DATA: ProjectItem[] = [
     githubUrl: 'https://github.com/irfandyz'
   },
   {
-    id: 'si-app',
-    code: 'PRJ-03 // SI-MEDIA-ECOSYSTEM',
-    title: 'Sekolah Iklan App (SI APP)',
-    shortTitle: 'SI App',
-    client: 'Sekolah Iklan Indonesia',
-    year: '2023',
-    category: 'Backend',
-    status: '',
-    summary: 'Platform media sosial dan ekosistem periklanan digital untuk pelaku usaha/UMKM dengan fitur penargetan audiens dan dasbor analitik ROAS interaktif.',
-    highlights: [
-      'Dynamic Audience Targeting & Ad Engine',
-      'Interactive ROAS Analytics & Conversion Dashboard',
-      'High-throughput RESTful Backend Endpoints',
-      'Cross-platform Flutter Mobile Integration'
-    ],
-    techStack: ['Laravel', 'Node.js', 'MySQL', 'Flutter', 'Bootstrap', 'REST API'],
-    imageMockup: `${BASE}projects/si_app.webp`,
-    githubUrl: 'https://github.com/irfandyz'
-  },
-  {
     id: 'hrms',
-    code: 'PRJ-04 // HRMS',
+    code: 'PRJ-03 // HRMS',
     title: 'Human Resource Management System (HRMS)',
     shortTitle: 'HRMS',
     client: 'Enterprise Systems',
@@ -156,7 +136,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   },
   {
     id: 'school-admin',
-    code: 'PRJ-05 // EDU-INFRA-SYS',
+    code: 'PRJ-04 // EDU-INFRA-SYS',
     title: 'Infrastruktur & Administrasi Sekolah Terpadu',
     shortTitle: 'Edu Infra',
     client: 'Yayasan Pendidikan',
@@ -176,7 +156,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   },
   {
     id: 'mandiri-cipta',
-    code: 'PRJ-06 // EXPORT-SHOWCASE',
+    code: 'PRJ-05 // EXPORT-SHOWCASE',
     title: 'Website Profil CV. Mandiri Cipta Adikarya',
     shortTitle: 'MCA Profile',
     client: 'CV. Mandiri Cipta Adikarya',
@@ -195,7 +175,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
   },
   {
     id: 'portfolio-v2',
-    code: 'PRJ-07 // CYBER-DECK-V2',
+    code: 'PRJ-06 // CYBER-DECK-V2',
     title: 'Personal Portfolio Cyber 3D Deck',
     shortTitle: 'Cyber Deck 3D',
     client: 'Self Project',
