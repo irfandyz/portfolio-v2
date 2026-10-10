@@ -82,7 +82,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     client: 'PT. Arkadaya Hakato Persada',
     year: '2025',
     category: 'Full Stack',
-    status: 'PRODUCTION ● AUDIT-READY',
+    status: '',
     summary: 'Command center logistik dan armada terintegrasi dengan modul fleet management, auto-dispatching algoritma rute, pelacakan GPS real-time, electronic Proof of Delivery (e-POD), dan dasbor KPI siap audit.',
     highlights: [
       'Real-Time GPS Fleet Tracking & Geofencing',
@@ -102,7 +102,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     client: 'Enterprise Systems',
     year: '2026',
     category: 'Full Stack',
-    status: 'PRODUCTION ● CLOUD ERP',
+    status: '',
     summary: 'Sistem ERP berbasis web terintegrasi yang berfokus pada Supply Chain Management (SCM) dan manajemen keuangan korporat, mencakup pengadaan barang (procurement), inventori multi-gudang, penagihan, serta pelaporan cash flow dan laba rugi real-time.',
     highlights: [
       'Supply Chain Management (SCM) & Automated Vendor Procurement',
@@ -122,7 +122,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     client: 'Sekolah Iklan Indonesia',
     year: '2023',
     category: 'Backend',
-    status: 'DEPLOYED ● SCALE READY',
+    status: '',
     summary: 'Platform media sosial dan ekosistem periklanan digital untuk pelaku usaha/UMKM dengan fitur penargetan audiens dan dasbor analitik ROAS interaktif.',
     highlights: [
       'Dynamic Audience Targeting & Ad Engine',
@@ -142,7 +142,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     client: 'Enterprise Systems',
     year: '2022',
     category: 'Backend',
-    status: 'ENTERPRISE DEPLOYMENT',
+    status: '',
     summary: 'Sistem automasi data karyawan terpusat dengan absensi digital/fingerprint real-time, manajemen cuti terintegrasi, dan kalkulasi payroll otomatis.',
     highlights: [
       'Biometric Fingerprint Hardware Sync & Automation',
@@ -162,7 +162,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     client: 'Yayasan Pendidikan',
     year: '2023',
     category: 'Full Stack',
-    status: 'ACTIVE SYSTEM',
+    status: '',
     summary: 'Sistem manajemen sekolah mencakup absensi digital siswa/guru, transparansi pengelolaan dana bantuan operasional (BOS & BOPD), serta pelaporan keuangan otomatis.',
     highlights: [
       'Transparansi Alokasi Dana BOS & BOPD Siap Audit',
@@ -182,7 +182,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     client: 'CV. Mandiri Cipta Adikarya',
     year: '2024',
     category: 'Full Stack',
-    status: 'LIVE CLIENT SYSTEM',
+    status: '',
     summary: 'Website korporat dan etalase digital produk rotan berkualitas tinggi untuk ekspansi pasar ekspor internasional.',
     highlights: [
       'High-performance Product Catalog Showcase',
@@ -201,7 +201,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     client: 'Self Project',
     year: '2026',
     category: 'Frontend',
-    status: 'CURRENT SYSTEM ● 60 FPS',
+    status: '',
     summary: 'Showcase karya interaktif 3D Cyber-Japan dengan Three.js, React Three Fiber, post-processing bloom, dan fullscreen scroll snap.',
     highlights: [
       'Interactive 3D Holographic Projector with Laser Transitions',

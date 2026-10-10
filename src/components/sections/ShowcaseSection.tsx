@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { PROJECTS_DATA, type ProjectItem } from '../../data/portfolioData'
 import { ChevronLeft, ChevronRight, ExternalLink, CheckCircle2, FileText } from 'lucide-react'
 import { ProjectBlueprintModal } from '../ui/ProjectBlueprintModal'
@@ -13,6 +13,46 @@ export function ShowcaseSection({ playClick, playHoloBeam, isActive = true }: Sh
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false)
   const [activeModalProject, setActiveModalProject] = useState<ProjectItem | null>(null)
+
+  const tabsContainerRef = useRef<HTMLDivElement>(null)
+  const isDraggingRef = useRef<boolean>(false)
+  const startXRef = useRef<number>(0)
+  const scrollLeftRef = useRef<number>(0)
+  const hasMovedRef = useRef<boolean>(false)
+
+  // Smoothly center the active project button in the horizontal dock whenever currentIndex changes
+  useEffect(() => {
+    if (tabsContainerRef.current) {
+      const activeEl = tabsContainerRef.current.children[currentIndex] as HTMLElement
+      if (activeEl) {
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      }
+    }
+  }, [currentIndex])
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isDraggingRef.current = true
+    hasMovedRef.current = false
+    startXRef.current = e.pageX - (tabsContainerRef.current?.offsetLeft || 0)
+    scrollLeftRef.current = tabsContainerRef.current?.scrollLeft || 0
+  }
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current || !tabsContainerRef.current) return
+    const x = e.pageX - (tabsContainerRef.current.offsetLeft || 0)
+    const walk = x - startXRef.current
+    if (Math.abs(walk) > 4) {
+      hasMovedRef.current = true
+    }
+    tabsContainerRef.current.scrollLeft = scrollLeftRef.current - walk
+  }
+
+  const handlePointerUp = () => {
+    isDraggingRef.current = false
+    setTimeout(() => {
+      hasMovedRef.current = false
+    }, 60)
+  }
 
   const activeProject: ProjectItem = PROJECTS_DATA[currentIndex]
 
@@ -214,16 +254,33 @@ export function ShowcaseSection({ playClick, playHoloBeam, isActive = true }: Sh
                 <span className="hidden sm:inline">PREV_SYS</span>
               </button>
 
-              {/* Thumbnails Mini Switcher */}
-              <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto py-0.5 cyber-scrollbar max-w-[200px] sm:max-w-none">
+              {/* Thumbnails Horizontal Swipe Switcher */}
+              <div
+                ref={tabsContainerRef}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerLeave={handlePointerUp}
+                className="flex-1 min-w-0 flex items-center gap-1.5 sm:gap-2 overflow-x-auto py-1 px-1 cyber-scrollbar scroll-smooth cursor-grab active:cursor-grabbing select-none"
+                style={{
+                  touchAction: 'pan-x',
+                  overscrollBehaviorX: 'contain',
+                  WebkitOverflowScrolling: 'touch',
+                }}
+              >
                 {PROJECTS_DATA.map((proj, idx) => (
                   <button
                     key={proj.id}
-                    onClick={() => handleSelectProject(idx)}
-                    className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-[9px] sm:text-[10px] font-tech tracking-wider border transition-all cursor-pointer whitespace-nowrap ${currentIndex === idx
-                      ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(0,240,255,0.4)]'
-                      : 'bg-slate-900/50 border-slate-800 text-slate-500 hover:text-slate-300 hover:border-slate-700'
-                      }`}
+                    onClick={() => {
+                      if (hasMovedRef.current) return // User was dragging/swiping
+                      playClick()
+                      handleSelectProject(idx)
+                    }}
+                    className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded text-[9px] sm:text-[10px] font-tech tracking-wider border transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                      currentIndex === idx
+                        ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,240,255,0.4)]'
+                        : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                    }`}
                   >
                     <span className="font-bold text-cyan-400/90">// {String(idx + 1).padStart(2, '0')}</span>
                     <span className="ml-1 sm:ml-1.5 font-semibold">{proj.shortTitle || proj.title}</span>
