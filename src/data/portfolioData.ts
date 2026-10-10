@@ -238,7 +238,7 @@ export const CAREER_DATA: CareerItem[] = [
   },
   {
     id: 'arkato',
-    company: 'PT. Uniteda Arkato',
+    company: 'PT. Arkadaya Hakato Persada',
     role: 'Internship - IT Engineer',
     period: 'Agu 2025 – Jun 2026',
     duration: '11 Bulan',

@@ -9,7 +9,7 @@ interface CareerSectionProps {
 }
 
 export function CareerSection({ playClick, playHoloBeam, isActive = true }: CareerSectionProps) {
-  // Default to the most recent experience (PT. Uniteda Arkato 2025-2026 or Rittercoding)
+  // Default to the most recent experience (PT. Arkadaya Hakato Persada 2025-2026 or Rittercoding)
   const [selectedIdx, setSelectedIdx] = useState<number>(3)
   const [isDecoding, setIsDecoding] = useState<boolean>(false)
 

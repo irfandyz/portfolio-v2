@@ -11,7 +11,7 @@ export function ChronoStream3D({ activeChamber }: ChronoStream3DProps) {
   const ringsRef = useRef<THREE.Group>(null)
   const packetsRef = useRef<THREE.Group>(null)
 
-  // 4 Station Chrono Rings corresponding to Orbit, Java Genius, Rittercoding, Uniteda Arkato
+  // 4 Station Chrono Rings corresponding to Orbit, Java Genius, Rittercoding, Arkadaya Hakato Persada
   const stations = [
     { z: 1.0, color: '#00f0ff', radius: 2.2 },
     { z: -1.2, color: '#ec4899', radius: 2.6 },
