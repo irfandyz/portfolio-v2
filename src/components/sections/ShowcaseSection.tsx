@@ -6,9 +6,10 @@ import { ProjectBlueprintModal } from '../ui/ProjectBlueprintModal'
 interface ShowcaseSectionProps {
   playClick: () => void
   playHoloBeam: () => void
+  isActive?: boolean
 }
 
-export function ShowcaseSection({ playClick, playHoloBeam }: ShowcaseSectionProps) {
+export function ShowcaseSection({ playClick, playHoloBeam, isActive = true }: ShowcaseSectionProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false)
   const [activeModalProject, setActiveModalProject] = useState<ProjectItem | null>(null)
@@ -44,7 +45,13 @@ export function ShowcaseSection({ playClick, playHoloBeam }: ShowcaseSectionProp
 
         <div className="relative z-10 max-w-6xl w-full h-full flex flex-col justify-center">
           {/* Section Header */}
-          <div className="flex items-center justify-between mb-2 sm:mb-3 md:mb-5 shrink-0">
+          <div
+            className={`flex items-center justify-between mb-2 sm:mb-3 md:mb-5 shrink-0 transition-all duration-700 ease-out ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[150ms]'
+                : 'opacity-0 translate-y-6 filter blur-[3px] pointer-events-none'
+            }`}
+          >
             <div>
               <div className="text-[10px] sm:text-[11px] font-tech text-cyan-400 tracking-widest flex items-center gap-1.5 sm:gap-2">
                 <span>// PROTOCOL 03</span>
@@ -63,7 +70,13 @@ export function ShowcaseSection({ playClick, playHoloBeam }: ShowcaseSectionProp
           </div>
 
           {/* Central Holographic Projector Pod */}
-          <div className="relative cyber-glass rounded-2xl border-cyan-500/30 bg-[#080b14]/90 p-3 sm:p-5 md:p-6 shadow-[0_0_50px_rgba(0,240,255,0.18)] flex-1 max-h-[85dvh] sm:max-h-[80dvh] lg:max-h-[72dvh] flex flex-col justify-between overflow-hidden">
+          <div
+            className={`relative cyber-glass rounded-2xl border-cyan-500/30 bg-[#080b14]/90 p-3 sm:p-5 md:p-6 shadow-[0_0_50px_rgba(0,240,255,0.18)] flex-1 max-h-[85dvh] sm:max-h-[80dvh] lg:max-h-[72dvh] flex flex-col justify-between overflow-hidden transition-all duration-700 ease-out ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[300ms]'
+                : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+            }`}
+          >
             {/* Top Scanline Line */}
             <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-pulse" />
 

@@ -5,9 +5,10 @@ import { Briefcase, Calendar, CheckCircle, Sparkles, Clock, ShieldCheck } from '
 interface CareerSectionProps {
   playClick: () => void
   playHoloBeam: () => void
+  isActive?: boolean
 }
 
-export function CareerSection({ playClick, playHoloBeam }: CareerSectionProps) {
+export function CareerSection({ playClick, playHoloBeam, isActive = true }: CareerSectionProps) {
   // Default to the most recent experience (PT. Uniteda Arkato 2025-2026 or Rittercoding)
   const [selectedIdx, setSelectedIdx] = useState<number>(3)
   const [isDecoding, setIsDecoding] = useState<boolean>(false)
@@ -31,7 +32,13 @@ export function CareerSection({ playClick, playHoloBeam }: CareerSectionProps) {
     >
       <div className="relative z-10 max-w-6xl w-full h-full flex flex-col justify-center">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-3 md:mb-5">
+        <div
+          className={`flex items-center justify-between mb-3 md:mb-5 transition-all duration-700 ease-out ${
+            isActive
+              ? 'opacity-100 translate-y-0 filter blur-0 delay-[150ms]'
+              : 'opacity-0 translate-y-6 filter blur-[3px] pointer-events-none'
+          }`}
+        >
           <div>
             <div className="text-[11px] font-tech text-cyan-400 tracking-widest flex items-center gap-2">
               <span>// PROTOCOL 04</span>
@@ -51,7 +58,13 @@ export function CareerSection({ playClick, playHoloBeam }: CareerSectionProps) {
         {/* Dual-Zone Container */}
         <div className="flex flex-col gap-3.5 max-h-[72dvh] flex-1">
           {/* Top-Center Main Reading Stage (~65% of container height) */}
-          <div className="relative cyber-glass rounded-2xl border-cyan-500/30 bg-[#080b15]/92 p-5 md:p-6 shadow-[0_0_40px_rgba(0,240,255,0.15)] flex-1 overflow-y-auto cyber-scrollbar flex flex-col justify-between">
+          <div
+            className={`relative cyber-glass rounded-2xl border-cyan-500/30 bg-[#080b15]/92 p-5 md:p-6 shadow-[0_0_40px_rgba(0,240,255,0.15)] flex-1 overflow-y-auto cyber-scrollbar flex flex-col justify-between transition-all duration-700 ease-out ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[300ms]'
+                : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+            }`}
+          >
             {/* Top Glowing Laser Strip */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-pink-500 to-cyan-500 animate-pulse" />
 
@@ -134,7 +147,13 @@ export function CareerSection({ playClick, playHoloBeam }: CareerSectionProps) {
           </div>
 
           {/* Bottom Career Selector Dock (~35% of container height) */}
-          <div className="space-y-1.5">
+          <div
+            className={`space-y-1.5 transition-all duration-700 ease-out ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[450ms]'
+                : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+            }`}
+          >
             <div className="flex items-center justify-between text-[10px] font-tech text-cyan-400/80 tracking-widest uppercase">
               <span>// CHOOSE CAREER NODE (KLIK UNTUK MEMBUKA RINCIAN):</span>
               <span className="text-slate-500 hidden sm:inline">TACTICAL AUDIO SWITCH ●</span>

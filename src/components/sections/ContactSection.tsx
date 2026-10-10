@@ -5,9 +5,10 @@ import { Mail, Phone, Send, Terminal, CheckCircle2, ShieldCheck } from 'lucide-r
 interface ContactSectionProps {
   playClick: () => void
   playHoloBeam: () => void
+  isActive?: boolean
 }
 
-export function ContactSection({ playClick, playHoloBeam }: ContactSectionProps) {
+export function ContactSection({ playClick, playHoloBeam, isActive = true }: ContactSectionProps) {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [isTransmitting, setIsTransmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -42,7 +43,13 @@ export function ContactSection({ playClick, playHoloBeam }: ContactSectionProps)
 
       <div className="relative z-10 max-w-6xl w-full h-full flex flex-col justify-center">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-3 md:mb-5">
+        <div
+          className={`flex items-center justify-between mb-3 md:mb-5 transition-all duration-700 ease-out ${
+            isActive
+              ? 'opacity-100 translate-y-0 filter blur-0 delay-[150ms]'
+              : 'opacity-0 translate-y-6 filter blur-[3px] pointer-events-none'
+          }`}
+        >
           <div>
             <div className="text-[11px] font-tech text-cyan-400 tracking-widest flex items-center gap-2">
               <span>// PROTOCOL 07</span>
@@ -65,7 +72,13 @@ export function ContactSection({ playClick, playHoloBeam }: ContactSectionProps)
         {/* Contact Terminal Split Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-5 max-h-[73dvh] overflow-y-auto cyber-scrollbar pr-1">
           {/* Left: Quick Frequencies (5 cols) */}
-          <div className="lg:col-span-5 space-y-3">
+          <div
+            className={`lg:col-span-5 space-y-3 transition-all duration-700 ease-out ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[300ms]'
+                : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+            }`}
+          >
             <div className="cyber-glass rounded-xl p-4 md:p-5 border-cyan-500/20 bg-[#090c17]/90 space-y-3 relative overflow-hidden">
               <div className="text-xs font-tech text-cyan-400 font-semibold uppercase tracking-wider flex items-center gap-2">
                 <Terminal className="w-4 h-4 text-cyan-400" />
@@ -171,7 +184,13 @@ export function ContactSection({ playClick, playHoloBeam }: ContactSectionProps)
           </div>
 
           {/* Right: Message Terminal Form (7 cols) */}
-          <div className="lg:col-span-7">
+          <div
+            className={`lg:col-span-7 transition-all duration-700 ease-out ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[450ms]'
+                : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+            }`}
+          >
             <div className="cyber-glass rounded-xl p-4 md:p-6 border-cyan-500/20 bg-[#090c17]/92 relative overflow-hidden">
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-800">
                 <span className="text-xs font-tech text-pink-400 font-semibold tracking-wider flex items-center gap-2">

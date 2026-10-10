@@ -96,22 +96,44 @@ export function App() {
         />
 
         {/* Chamber 02: Operator Dossier // Identity & Tech Matrix */}
-        <DossierSection playClick={playClick} />
+        <DossierSection
+          playClick={playClick}
+          isActive={isEntered && activeChamber === 1}
+        />
 
         {/* Chamber 03: Showcase // Central Hologram Chamber */}
-        <ShowcaseSection playClick={playClick} playHoloBeam={playHoloBeam} />
+        <ShowcaseSection
+          playClick={playClick}
+          playHoloBeam={playHoloBeam}
+          isActive={isEntered && activeChamber === 2}
+        />
 
         {/* Chamber 04: Career Logs // Chrono-Console */}
-        <CareerSection playClick={playClick} playHoloBeam={playHoloBeam} />
+        <CareerSection
+          playClick={playClick}
+          playHoloBeam={playHoloBeam}
+          isActive={isEntered && activeChamber === 3}
+        />
 
         {/* Chamber 05: Academic Matrix // Education Credentials */}
-        <AcademicSection playClick={playClick} />
+        <AcademicSection
+          playClick={playClick}
+          isActive={isEntered && activeChamber === 4}
+        />
 
         {/* Chamber 06: Capabilities // Professional Services */}
-        <ServicesSection playClick={playClick} scrollToChamber={scrollToChamber} />
+        <ServicesSection
+          playClick={playClick}
+          scrollToChamber={scrollToChamber}
+          isActive={isEntered && activeChamber === 5}
+        />
 
         {/* Chamber 07: Direct Uplink // Contact */}
-        <ContactSection playClick={playClick} playHoloBeam={playHoloBeam} />
+        <ContactSection
+          playClick={playClick}
+          playHoloBeam={playHoloBeam}
+          isActive={isEntered && activeChamber === 6}
+        />
       </main>
     </div>
   )

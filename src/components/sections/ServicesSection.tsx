@@ -4,11 +4,20 @@ import { Code2, ShoppingBag, Network, Database, ShieldAlert, Cpu, ArrowUpRight }
 interface ServicesSectionProps {
   playClick: () => void
   scrollToChamber: (index: number) => void
+  isActive?: boolean
 }
 
 const SERVICE_ICONS = [Code2, ShoppingBag, Network, Database, ShieldAlert, Cpu]
+const DELAY_CLASSES = [
+  'delay-[200ms]',
+  'delay-[280ms]',
+  'delay-[360ms]',
+  'delay-[440ms]',
+  'delay-[520ms]',
+  'delay-[600ms]',
+]
 
-export function ServicesSection({ playClick, scrollToChamber }: ServicesSectionProps) {
+export function ServicesSection({ playClick, scrollToChamber, isActive = true }: ServicesSectionProps) {
   const handleInquireService = () => {
     playClick()
     scrollToChamber(6) // Jump to Contact Chamber
@@ -21,7 +30,13 @@ export function ServicesSection({ playClick, scrollToChamber }: ServicesSectionP
     >
       <div className="relative z-10 max-w-6xl w-full h-full flex flex-col justify-center">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-3 md:mb-5">
+        <div
+          className={`flex items-center justify-between mb-3 md:mb-5 transition-all duration-700 ease-out ${
+            isActive
+              ? 'opacity-100 translate-y-0 filter blur-0 delay-[150ms]'
+              : 'opacity-0 translate-y-6 filter blur-[3px] pointer-events-none'
+          }`}
+        >
           <div>
             <div className="text-[11px] font-tech text-cyan-400 tracking-widest flex items-center gap-2">
               <span>// PROTOCOL 06</span>
@@ -52,7 +67,11 @@ export function ServicesSection({ playClick, scrollToChamber }: ServicesSectionP
               <div
                 key={service.id}
                 onClick={handleInquireService}
-                className="cyber-glass rounded-xl p-3.5 sm:p-5 border-cyan-500/20 hover:border-cyan-400/70 bg-[#090c17]/90 hover:bg-[#0d1222] transition-all duration-300 flex flex-col justify-between group cursor-pointer relative min-h-[165px] sm:min-h-[190px] h-auto shrink-0"
+                className={`cyber-glass rounded-xl p-3.5 sm:p-5 border-cyan-500/20 hover:border-cyan-400/70 bg-[#090c17]/90 hover:bg-[#0d1222] transition-all duration-700 ease-out flex flex-col justify-between group cursor-pointer relative min-h-[165px] sm:min-h-[190px] h-auto shrink-0 ${
+                  isActive
+                    ? `opacity-100 translate-y-0 filter blur-0 ${DELAY_CLASSES[idx % DELAY_CLASSES.length]}`
+                    : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+                }`}
               >
                 {/* Top Subtle Accent Strip on Hover */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity" />

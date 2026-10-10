@@ -1,4 +1,4 @@
-import { Sparkles, ChevronDown } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 
 interface GateIntroPromptProps {
   onEnter: () => void

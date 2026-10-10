@@ -4,9 +4,10 @@ import { Server, Layout, Database, ShieldCheck, Cpu, Copy, Check } from 'lucide-
 
 interface DossierSectionProps {
   playClick: () => void
+  isActive?: boolean
 }
 
-export function DossierSection({ playClick }: DossierSectionProps) {
+export function DossierSection({ playClick, isActive = true }: DossierSectionProps) {
   const [copiedEmail, setCopiedEmail] = useState(false)
 
   const handleCopyEmail = () => {
@@ -23,7 +24,13 @@ export function DossierSection({ playClick }: DossierSectionProps) {
     >
       <div className="relative z-10 max-w-6xl w-full h-full flex flex-col justify-center">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-3 md:mb-5">
+        <div
+          className={`flex items-center justify-between mb-3 md:mb-5 transition-all duration-700 ease-out ${
+            isActive
+              ? 'opacity-100 translate-y-0 filter blur-0 delay-[150ms]'
+              : 'opacity-0 translate-y-6 filter blur-[3px] pointer-events-none'
+          }`}
+        >
           <div>
             <div className="text-[11px] font-tech text-cyan-400 tracking-widest flex items-center gap-2">
               <span>// PROTOCOL 02</span>
@@ -39,7 +46,13 @@ export function DossierSection({ playClick }: DossierSectionProps) {
         {/* Bento Grid Layout (100dvh scroll-safe) */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3.5 md:gap-4 overflow-y-auto max-h-[78dvh] pr-1 cyber-scrollbar">
           {/* Card 1: Operator ID Photo & Bio (Spans 2 rows on large screen) */}
-          <div className="cyber-glass rounded-xl p-4 md:p-5 flex flex-col justify-between border-cyan-500/25 md:col-span-1 lg:col-span-1 lg:row-span-2 bg-[#090c17]/90 relative group">
+          <div
+            className={`cyber-glass rounded-xl p-4 md:p-5 flex flex-col justify-between border-cyan-500/25 md:col-span-1 lg:col-span-1 lg:row-span-2 bg-[#090c17]/90 relative group transition-all duration-700 ease-out ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[250ms]'
+                : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+            }`}
+          >
             {/* Top Cyan Glowing Line */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-500" />
 
@@ -101,7 +114,13 @@ export function DossierSection({ playClick }: DossierSectionProps) {
           </div>
 
           {/* Card 2: Backend Architecture Core (Spans 2 cols) */}
-          <div className="cyber-glass rounded-xl p-4 md:p-5 border-cyan-500/20 md:col-span-2 bg-[#090c17]/90 flex flex-col justify-between group">
+          <div
+            className={`cyber-glass rounded-xl p-4 md:p-5 border-cyan-500/20 md:col-span-2 bg-[#090c17]/90 flex flex-col justify-between group transition-all duration-700 ease-out ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[350ms]'
+                : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+            }`}
+          >
             <div>
               <div className="flex items-center justify-between mb-2.5">
                 <div className="flex items-center gap-2 text-cyan-300 font-tech font-bold text-sm">
@@ -137,7 +156,13 @@ export function DossierSection({ playClick }: DossierSectionProps) {
           </div>
 
           {/* Card 3: Frontend & Creative Interface */}
-          <div className="cyber-glass rounded-xl p-4 md:p-5 border-cyan-500/20 md:col-span-1 bg-[#090c17]/90 flex flex-col justify-between group">
+          <div
+            className={`cyber-glass rounded-xl p-4 md:p-5 border-cyan-500/20 md:col-span-1 bg-[#090c17]/90 flex flex-col justify-between group transition-all duration-700 ease-out ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[450ms]'
+                : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+            }`}
+          >
             <div>
               <div className="flex items-center justify-between mb-2.5">
                 <div className="flex items-center gap-2 text-pink-300 font-tech font-bold text-sm">
@@ -173,7 +198,13 @@ export function DossierSection({ playClick }: DossierSectionProps) {
           </div>
 
           {/* Card 4: Database & DevOps Infrastructure (Spans 2 cols) */}
-          <div className="cyber-glass rounded-xl p-4 md:p-5 border-cyan-500/20 md:col-span-2 bg-[#090c17]/90 flex flex-col justify-between group">
+          <div
+            className={`cyber-glass rounded-xl p-4 md:p-5 border-cyan-500/20 md:col-span-2 bg-[#090c17]/90 flex flex-col justify-between group transition-all duration-700 ease-out ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[550ms]'
+                : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+            }`}
+          >
             <div>
               <div className="flex items-center justify-between mb-2.5">
                 <div className="flex items-center gap-2 text-amber-300 font-tech font-bold text-sm">
@@ -209,7 +240,13 @@ export function DossierSection({ playClick }: DossierSectionProps) {
           </div>
 
           {/* Card 5: Soft Skills & Philosophy */}
-          <div className="cyber-glass rounded-xl p-4 md:p-5 border-cyan-500/20 md:col-span-1 lg:col-span-1 bg-[#090c17]/90 flex flex-col justify-between group">
+          <div
+            className={`cyber-glass rounded-xl p-4 md:p-5 border-cyan-500/20 md:col-span-1 lg:col-span-1 bg-[#090c17]/90 flex flex-col justify-between group transition-all duration-700 ease-out ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[650ms]'
+                : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+            }`}
+          >
             <div>
               <div className="flex items-center gap-2 text-emerald-300 font-tech font-bold text-sm mb-2.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />

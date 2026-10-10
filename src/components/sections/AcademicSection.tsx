@@ -3,9 +3,10 @@ import { GraduationCap, Award, BookOpen, CheckCircle2, ArrowRight, Sparkles } fr
 
 interface AcademicSectionProps {
   playClick: () => void
+  isActive?: boolean
 }
 
-export function AcademicSection({ playClick }: AcademicSectionProps) {
+export function AcademicSection({ playClick, isActive = true }: AcademicSectionProps) {
   return (
     <section 
       id="academic"
@@ -16,7 +17,13 @@ export function AcademicSection({ playClick }: AcademicSectionProps) {
 
       <div className="relative z-10 max-w-6xl w-full h-full flex flex-col justify-center">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-3 md:mb-5">
+        <div
+          className={`flex items-center justify-between mb-3 md:mb-5 transition-all duration-700 ease-out ${
+            isActive
+              ? 'opacity-100 translate-y-0 filter blur-0 delay-[150ms]'
+              : 'opacity-0 translate-y-6 filter blur-[3px] pointer-events-none'
+          }`}
+        >
           <div>
             <div className="text-[11px] font-tech text-cyan-400 tracking-widest flex items-center gap-2">
               <span>// PROTOCOL 05</span>
@@ -41,7 +48,11 @@ export function AcademicSection({ playClick }: AcademicSectionProps) {
           {/* Card 1: Higher Education (Universitas CIC) */}
           <div 
             onClick={playClick}
-            className="cyber-glass rounded-2xl border-cyan-500/30 bg-[#090c17]/92 p-5 md:p-6 shadow-[0_0_35px_rgba(0,240,255,0.18)] hover:shadow-[0_0_45px_rgba(0,240,255,0.3)] transition-all duration-300 flex flex-col justify-between relative overflow-hidden group cursor-pointer"
+            className={`cyber-glass rounded-2xl border-cyan-500/30 bg-[#090c17]/92 p-5 md:p-6 shadow-[0_0_35px_rgba(0,240,255,0.18)] hover:shadow-[0_0_45px_rgba(0,240,255,0.3)] transition-all duration-700 ease-out flex flex-col justify-between relative overflow-hidden group cursor-pointer ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[300ms]'
+                : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+            }`}
           >
             {/* Top Cyan Accent Strip */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-400" />
@@ -92,7 +103,11 @@ export function AcademicSection({ playClick }: AcademicSectionProps) {
           {/* Card 2: Vocational Foundation (SMK Al-Irsyad) */}
           <div 
             onClick={playClick}
-            className="cyber-glass rounded-2xl border-pink-500/30 bg-[#090c17]/92 p-5 md:p-6 shadow-[0_0_35px_rgba(244,63,94,0.15)] hover:shadow-[0_0_45px_rgba(244,63,94,0.25)] transition-all duration-300 flex flex-col justify-between relative overflow-hidden group cursor-pointer"
+            className={`cyber-glass rounded-2xl border-pink-500/30 bg-[#090c17]/92 p-5 md:p-6 shadow-[0_0_35px_rgba(244,63,94,0.15)] hover:shadow-[0_0_45px_rgba(244,63,94,0.25)] transition-all duration-700 ease-out flex flex-col justify-between relative overflow-hidden group cursor-pointer ${
+              isActive
+                ? 'opacity-100 translate-y-0 filter blur-0 delay-[450ms]'
+                : 'opacity-0 translate-y-8 filter blur-[3px] pointer-events-none'
+            }`}
           >
             {/* Top Pink Accent Strip */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-500 via-rose-500 to-pink-400" />
