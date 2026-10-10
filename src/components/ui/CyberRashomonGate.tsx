@@ -101,113 +101,113 @@ export function CyberRashomonGate({
 
     const newParticles: Particle[] = []
 
-    // 1. ROOF SHARDS (Upper Pagoda Eaves: ~80 pieces exploding upwards and outwards)
-    for (let i = 0; i < 80; i++) {
+    // 1. ROOF SHARDS (Upper Pagoda Eaves: ~90 pieces exploding upwards and outwards)
+    for (let i = 0; i < 90; i++) {
       const px = cx + (Math.random() - 0.5) * 440
-      const py = cy - 120 + (Math.random() - 0.5) * 70
-      const angle = -Math.PI / 2 + (Math.random() - 0.5) * (Math.PI * 0.9)
-      const speed = Math.random() * 14 + 6
+      const py = cy - 120 + (Math.random() - 0.5) * 80
+      const angle = -Math.PI / 2 + (Math.random() - 0.5) * (Math.PI * 0.95)
+      const speed = Math.random() * 12 + 4
 
       newParticles.push({
         x: px,
         y: py,
         vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - Math.random() * 4,
-        width: Math.random() * 16 + 6,
-        height: Math.random() * 12 + 4,
+        vy: Math.sin(angle) * speed - Math.random() * 3,
+        width: Math.random() * 20 + 8,
+        height: Math.random() * 16 + 6,
         color: cyberColors[Math.floor(Math.random() * cyberColors.length)],
         alpha: 1,
-        decay: Math.random() * 0.012 + 0.007,
+        decay: Math.random() * 0.008 + 0.005,
         rotation: Math.random() * 360,
-        spin: (Math.random() - 0.5) * 16,
+        spin: (Math.random() - 0.5) * 14,
         type: 'shard',
       })
     }
 
-    // 2. LEFT PILLAR SHARDS (Left Column: ~70 pieces exploding to the left)
-    for (let i = 0; i < 70; i++) {
-      const px = cx - 150 + (Math.random() - 0.5) * 60
-      const py = cy + 20 + (Math.random() - 0.5) * 200
-      const angle = Math.PI + (Math.random() - 0.5) * (Math.PI * 0.7)
-      const speed = Math.random() * 15 + 5
+    // 2. LEFT PILLAR SHARDS (Left Column: ~80 pieces exploding to the left)
+    for (let i = 0; i < 80; i++) {
+      const px = cx - 150 + (Math.random() - 0.5) * 70
+      const py = cy + 20 + (Math.random() - 0.5) * 220
+      const angle = Math.PI + (Math.random() - 0.5) * (Math.PI * 0.75)
+      const speed = Math.random() * 13 + 4
 
       newParticles.push({
         x: px,
         y: py,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        width: Math.random() * 18 + 6,
-        height: Math.random() * 14 + 5,
+        width: Math.random() * 22 + 8,
+        height: Math.random() * 18 + 6,
         color: Math.random() > 0.4 ? '#00f0ff' : '#ff007f',
         alpha: 1,
-        decay: Math.random() * 0.012 + 0.007,
+        decay: Math.random() * 0.008 + 0.005,
         rotation: Math.random() * 360,
-        spin: (Math.random() - 0.5) * 16,
+        spin: (Math.random() - 0.5) * 14,
         type: 'shard',
       })
     }
 
-    // 3. RIGHT PILLAR SHARDS (Right Column: ~70 pieces exploding to the right)
-    for (let i = 0; i < 70; i++) {
-      const px = cx + 150 + (Math.random() - 0.5) * 60
-      const py = cy + 20 + (Math.random() - 0.5) * 200
-      const angle = 0 + (Math.random() - 0.5) * (Math.PI * 0.7)
-      const speed = Math.random() * 15 + 5
+    // 3. RIGHT PILLAR SHARDS (Right Column: ~80 pieces exploding to the right)
+    for (let i = 0; i < 80; i++) {
+      const px = cx + 150 + (Math.random() - 0.5) * 70
+      const py = cy + 20 + (Math.random() - 0.5) * 220
+      const angle = 0 + (Math.random() - 0.5) * (Math.PI * 0.75)
+      const speed = Math.random() * 13 + 4
 
       newParticles.push({
         x: px,
         y: py,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        width: Math.random() * 18 + 6,
-        height: Math.random() * 14 + 5,
+        width: Math.random() * 22 + 8,
+        height: Math.random() * 18 + 6,
         color: Math.random() > 0.4 ? '#00f0ff' : '#ff007f',
         alpha: 1,
-        decay: Math.random() * 0.012 + 0.007,
+        decay: Math.random() * 0.008 + 0.005,
         rotation: Math.random() * 360,
-        spin: (Math.random() - 0.5) * 16,
+        spin: (Math.random() - 0.5) * 14,
         type: 'shard',
       })
     }
 
-    // 4. CENTRAL GATEWAY PORTAL & HEXAGON SHIELD (Center Core: ~100 festive glowing shards)
-    for (let i = 0; i < 100; i++) {
-      const px = cx + (Math.random() - 0.5) * 140
-      const py = cy + 10 + (Math.random() - 0.5) * 140
+    // 4. CENTRAL GATEWAY PORTAL & HEXAGON SHIELD (Center Core: ~120 festive glowing shards)
+    for (let i = 0; i < 120; i++) {
+      const px = cx + (Math.random() - 0.5) * 160
+      const py = cy + 10 + (Math.random() - 0.5) * 160
       const angle = Math.random() * Math.PI * 2
-      const speed = Math.random() * 18 + 6
+      const speed = Math.random() * 15 + 4
 
       newParticles.push({
         x: px,
         y: py,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        width: Math.random() * 12 + 4,
-        height: Math.random() * 10 + 4,
+        width: Math.random() * 16 + 6,
+        height: Math.random() * 14 + 6,
         color: cyberColors[Math.floor(Math.random() * cyberColors.length)],
         alpha: 1,
-        decay: Math.random() * 0.014 + 0.008,
+        decay: Math.random() * 0.009 + 0.006,
         rotation: Math.random() * 360,
-        spin: (Math.random() - 0.5) * 20,
+        spin: (Math.random() - 0.5) * 16,
         type: Math.random() > 0.3 ? 'shard' : 'spark',
       })
     }
 
-    // 5. RADIANT SPARKS & GLOWING MOTES (~80 bright embers)
-    for (let i = 0; i < 80; i++) {
+    // 5. RADIANT SPARKS & GLOWING MOTES (~90 bright embers)
+    for (let i = 0; i < 90; i++) {
       const angle = Math.random() * Math.PI * 2
-      const speed = Math.random() * 22 + 4
+      const speed = Math.random() * 18 + 4
 
       newParticles.push({
-        x: cx + (Math.random() - 0.5) * 200,
-        y: cy + (Math.random() - 0.5) * 200,
+        x: cx + (Math.random() - 0.5) * 220,
+        y: cy + (Math.random() - 0.5) * 220,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        width: Math.random() * 6 + 3,
-        height: Math.random() * 6 + 3,
+        width: Math.random() * 8 + 4,
+        height: Math.random() * 8 + 4,
         color: Math.random() > 0.5 ? '#ffe600' : '#ffffff',
         alpha: 1,
-        decay: Math.random() * 0.015 + 0.009,
+        decay: Math.random() * 0.01 + 0.006,
         rotation: 0,
         spin: 0,
         type: 'spark',
@@ -345,11 +345,17 @@ export function CyberRashomonGate({
     }
     return () => {
       document.body.style.overflow = ''
+    }
+  }, [isBreached])
+
+  // Cancel animation frame ONLY when component actually unmounts from DOM
+  useEffect(() => {
+    return () => {
       if (animFrameRef.current) {
         cancelAnimationFrame(animFrameRef.current)
       }
     }
-  }, [isBreached])
+  }, [])
 
   if (isExited) return null
 
@@ -371,10 +377,10 @@ export function CyberRashomonGate({
         backgroundColor: isBreached ? 'transparent' : '#05070e',
       }}
     >
-      {/* 1. Flash Shockwave Burst Overlay upon Breach */}
+      {/* 1. Flash Shockwave Burst Overlay upon Breach (Behind Canvas z-20) */}
       <div
-        className={`absolute inset-0 bg-cyan-200 pointer-events-none z-40 transition-opacity duration-200 ${
-          isFlashing ? 'opacity-85' : 'opacity-0'
+        className={`absolute inset-0 bg-cyan-100 pointer-events-none z-20 transition-opacity duration-150 ${
+          isFlashing ? 'opacity-40' : 'opacity-0'
         }`}
       />
 
