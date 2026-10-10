@@ -120,74 +120,23 @@
   background: rgba(0, 240, 255, 0.7);
 }
 
-/* Cyber Obsidian Curtain & Organic Theatrical Sway */
-.curtain-cyber-velvet {
-  background: 
-    repeating-linear-gradient(
-      90deg,
-      #03050a 0px,
-      #080c18 20px,
-      #0f172e 40px,
-      #16223e 60px,
-      #0f172e 80px,
-      #080c18 100px,
-      #03050a 120px
-    );
-  box-shadow: inset 0 0 160px rgba(0, 0, 0, 0.98);
-}
-
-.curtain-cyber-laser {
-  background: linear-gradient(
-    180deg,
-    rgba(0, 240, 255, 0.95),
-    rgba(255, 0, 127, 0.85),
-    rgba(0, 240, 255, 0.95)
-  );
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.8), 0 0 50px rgba(255, 0, 127, 0.45);
-}
-
-/* Organic Fabric Wave & Sway Keyframes */
-@keyframes curtainSwayLeft {
-  0% {
-    transform: translateX(0) scaleX(1) rotate(0deg) skewY(0deg);
+/* Screen Shake Keyframes for Cyber Gate Breach */
+@keyframes shake {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
   }
   20% {
-    transform: translateX(-20%) scaleX(0.96) rotate(3deg) skewY(2.5deg);
+    transform: translate(-4px, 2px) rotate(-0.5deg);
   }
-  50% {
-    transform: translateX(-55%) scaleX(0.92) rotate(-2deg) skewY(-1.8deg);
+  40% {
+    transform: translate(4px, -3px) rotate(0.6deg);
   }
-  80% {
-    transform: translateX(-88%) scaleX(0.88) rotate(1.2deg) skewY(0.8deg);
-  }
-  100% {
-    transform: translateX(-108%) scaleX(0.82) rotate(0deg) skewY(0deg);
-  }
-}
-
-@keyframes curtainSwayRight {
-  0% {
-    transform: translateX(0) scaleX(1) rotate(0deg) skewY(0deg);
-  }
-  20% {
-    transform: translateX(20%) scaleX(0.96) rotate(-3deg) skewY(-2.5deg);
-  }
-  50% {
-    transform: translateX(55%) scaleX(0.92) rotate(2deg) skewY(1.8deg);
+  60% {
+    transform: translate(-3px, -2px) rotate(-0.4deg);
   }
   80% {
-    transform: translateX(88%) scaleX(0.88) rotate(-1.2deg) skewY(-0.8deg);
-  }
-  100% {
-    transform: translateX(108%) scaleX(0.82) rotate(0deg) skewY(0deg);
+    transform: translate(3px, 2px) rotate(0.3deg);
   }
 }
 
-.animate-curtain-sway-left {
-  animation: curtainSwayLeft 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-
-.animate-curtain-sway-right {
-  animation: curtainSwayRight 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
 

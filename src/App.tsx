@@ -12,19 +12,20 @@ import { ServicesSection } from './components/sections/ServicesSection'
 import { ContactSection } from './components/sections/ContactSection'
 
 import { CyberCursor } from './components/ui/CyberCursor'
-import { TheaterCurtain } from './components/ui/TheaterCurtain'
+import { CyberRashomonGate } from './components/ui/CyberRashomonGate'
 
 export function App() {
-  const { isMuted, toggleMute, unmuteAndPlay, playClick, playHoloBeam, volume, setVolume, trackTitle, nextTrack } = useAudio()
+  const { isMuted, toggleMute, unmuteAndPlay, playClick, playHoloBeam, playWarp, volume, setVolume, trackTitle, nextTrack } = useAudio()
   const { activeChamber, containerRef, scrollToChamber } = useScrollSnap()
 
   return (
     <div className="relative w-screen h-[100dvh] overflow-hidden bg-[#07080d] text-slate-100 font-sans select-none">
-      {/* Theatrical Grand Entrance Crimson Curtain */}
-      <TheaterCurtain
+      {/* Cyber Rashomon Particle Breach Entrance */}
+      <CyberRashomonGate
         onOpen={unmuteAndPlay}
         playClick={playClick}
         playHoloBeam={playHoloBeam}
+        playWarp={playWarp}
       />
 
       {/* Sci-Fi Crosshair Cursor on Desktop */}
