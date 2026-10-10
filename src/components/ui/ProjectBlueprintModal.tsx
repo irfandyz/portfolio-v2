@@ -53,10 +53,6 @@ export function ProjectBlueprintModal({ project, onClose, playClick }: ProjectBl
               className="w-full h-full object-cover object-top" 
             />
             <div className="absolute inset-0 cyber-scanline opacity-30 pointer-events-none" />
-            <div className="absolute top-3 left-3 px-2.5 py-1 rounded bg-black/80 border border-emerald-500/50 text-xs font-tech text-emerald-400 font-semibold flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              <span>{project.status}</span>
-            </div>
           </div>
 
           {/* Project Metadata Specs */}

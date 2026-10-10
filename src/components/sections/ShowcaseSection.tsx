@@ -141,12 +141,6 @@ export function ShowcaseSection({ playClick, playHoloBeam, isActive = true }: Sh
                     <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-cyan-400" />
                     <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-cyan-400" />
                     <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-cyan-400" />
-
-                    {/* Badge Status */}
-                    <div className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md border border-emerald-500/40 text-[9px] sm:text-[10px] font-tech text-emerald-400 font-semibold flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                      <span>{activeProject.status}</span>
-                    </div>
                   </div>
 
                 </div>
