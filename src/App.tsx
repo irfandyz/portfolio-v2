@@ -37,15 +37,15 @@ export function App() {
     playHoloBeam()
     unmuteAndPlay()
 
-    // 1.1s walking through gate + 1.6s shrine slowly approaching = 2.7s total cinematic entrance
+    // 2.1s fluid continuous entrance glide into Haiden courtyard
     setTimeout(() => {
       setIsWarping(false)
       setIsEntered(true)
-    }, 2700)
+    }, 2100)
   }
 
   return (
-    <div className="relative w-screen h-[100dvh] overflow-hidden bg-[#07080d] text-slate-100 font-sans select-none">
+    <div className="relative w-screen h-[100dvh] overflow-hidden bg-[#05070b] text-slate-100 font-sans select-none">
       {/* 3D Gate Entrance Prompt (Active before entering) */}
       {!isEntered && (
         <GateIntroPrompt
@@ -54,18 +54,18 @@ export function App() {
         />
       )}
 
-      {/* Sci-Fi Crosshair Cursor on Desktop */}
+      {/* Sacred Tomoe Crosshair Cursor on Desktop */}
       <CyberCursor />
 
-      {/* Unified Continuous 3D World (Fixed across all Chambers) */}
+      {/* Unified Continuous 3D Shrine Sanctuary World */}
       <GlobalCyberScene3D
         activeChamber={isEntered ? activeChamber : 0}
         isEntered={isEntered}
         isWarping={isWarping}
       />
 
-      {/* Background Cyber Ambient CRT Scanline Grid */}
-      <div className="fixed inset-0 cyber-scanline pointer-events-none z-20 opacity-35" />
+      {/* Subtle Washi Silk Texture Overlay */}
+      <div className="fixed inset-0 cyber-scanline pointer-events-none z-20 opacity-20" />
 
       {/* Floating Audio SFX Bubble (Top Right) */}
       <AudioBubble

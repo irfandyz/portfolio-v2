@@ -12,16 +12,19 @@ export function SideRadar({ activeChamber, scrollToChamber, playClick }: SideRad
 
   return (
     <nav
-      aria-label="Chamber Navigation"
+      aria-label="Shrine Pilgrimage Navigation"
       onMouseEnter={() => setIsRadarHovered(true)}
       onMouseLeave={() => setIsRadarHovered(false)}
       className="fixed right-4 md:right-6 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-end gap-3.5 group/radar"
     >
-      <div className="text-[10px] font-tech text-cyan-400/50 uppercase tracking-widest mr-1 writing-mode-vertical transition-colors group-hover/radar:text-cyan-400">
-        // RADAR
+      <div className="text-[10px] font-kanji text-amber-400/60 tracking-widest mr-1 writing-mode-vertical transition-colors group-hover/radar:text-amber-300">
+        // 参拝路
       </div>
 
-      <div className="flex flex-col gap-2.5 items-end">
+      <div className="relative flex flex-col gap-2.5 items-end">
+        {/* Vertical Pilgrimage Pillar Thread */}
+        <div className="absolute right-[1.15rem] top-2 bottom-2 w-px bg-gradient-to-b from-rose-500/20 via-amber-400/35 to-teal-400/20 pointer-events-none" />
+
         {CHAMBERS.map((chamber, index) => {
           const isActive = activeChamber === index
           return (
@@ -31,9 +34,9 @@ export function SideRadar({ activeChamber, scrollToChamber, playClick }: SideRad
                 playClick()
                 scrollToChamber(index)
               }}
-              className="group flex items-center gap-3 cursor-pointer py-1 text-right focus:outline-none"
+              className="group flex items-center gap-3 cursor-pointer py-1 text-right focus:outline-none relative"
             >
-              {/* Tooltip Label (Visible ONLY when cursor hovers over the radar area) */}
+              {/* Tooltip Label */}
               <div
                 className={`flex items-center gap-2 transition-all duration-300 pointer-events-none ${
                   isRadarHovered && isActive
@@ -41,48 +44,50 @@ export function SideRadar({ activeChamber, scrollToChamber, playClick }: SideRad
                     : 'opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0'
                 }`}
               >
-                <span className="font-kanji text-[10px] text-slate-500">
+                <span className="hanko-seal px-1.5 py-0.5 rounded text-[10px] font-kanji font-bold">
                   {chamber.kanji}
                 </span>
                 <span
-                  className={`font-tech text-xs tracking-wider font-semibold whitespace-nowrap px-2 py-0.5 rounded border transition-colors ${
+                  className={`font-tech text-xs tracking-wider font-semibold whitespace-nowrap px-2.5 py-0.5 rounded border transition-colors ${
                     isActive
-                      ? 'bg-cyan-500/15 border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,240,255,0.3)]'
-                      : 'bg-slate-900/80 border-slate-800 text-slate-400'
+                      ? 'shrine-glass-active text-amber-200 border-amber-400/50 shadow-[0_0_14px_rgba(251,191,36,0.28)]'
+                      : 'bg-[#0a0d14]/90 border-amber-400/15 text-slate-400'
                   }`}
                 >
                   {chamber.label}
                 </span>
               </div>
 
-              {/* Radar Bar / Dot */}
-              <div className="relative flex items-center justify-center">
+              {/* Rotated 45deg Diamond Lantern Marker */}
+              <div className="relative flex items-center justify-center w-5 h-5">
                 {isActive && (
-                  <span className="absolute w-4 h-4 rounded-full bg-cyan-400/20 animate-ping" />
+                  <span className="absolute w-4 h-4 rotate-45 bg-amber-400/25 animate-ping" />
                 )}
                 <div
-                  className={`transition-all duration-300 rounded-sm ${
+                  className={`transition-all duration-300 rotate-45 ${
                     isActive
-                      ? 'w-6 h-1.5 bg-gradient-to-r from-pink-500 to-cyan-400 shadow-[0_0_10px_rgba(0,240,255,0.8)]'
-                      : 'w-2 h-1.5 bg-slate-700 group-hover:bg-cyan-400/60 group-hover:w-3.5'
+                      ? 'w-3 h-3 bg-gradient-to-br from-rose-500 via-amber-400 to-teal-300 shadow-[0_0_12px_rgba(251,191,36,0.85)] border border-amber-100/80'
+                      : 'w-2 h-2 bg-slate-700/90 border border-amber-500/30 group-hover:bg-amber-400/70 group-hover:scale-125'
                   }`}
                 />
               </div>
 
-              {/* Code indicator */}
+              {/* Traditional Kanji Numeral Marker (壱–漆) */}
               <span
-                className={`font-tech text-[10px] transition-colors w-4 ${
-                  isActive ? 'text-cyan-400 font-bold' : 'text-slate-600 group-hover:text-slate-400'
+                className={`font-kanji text-xs transition-colors w-4 text-center ${
+                  isActive
+                    ? 'text-amber-300 font-bold glow-text-gold'
+                    : 'text-slate-500 group-hover:text-amber-200'
                 }`}
               >
-                {chamber.code}
+                {chamber.kanjiNumeral}
               </span>
             </button>
           )
         })}
       </div>
 
-      <div className="h-10 w-px bg-gradient-to-b from-cyan-500/30 to-transparent mr-3" />
+      <div className="h-10 w-px bg-gradient-to-b from-amber-400/40 via-rose-500/30 to-transparent mr-3" />
     </nav>
   )
 }

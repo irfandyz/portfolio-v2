@@ -3,18 +3,19 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 export interface ChamberInfo {
   id: string
   code: string
+  kanjiNumeral: string
   label: string
   kanji: string
 }
 
 export const CHAMBERS: ChamberInfo[] = [
-  { id: 'hero', code: '01', label: 'HERO // GATEWAY', kanji: '電脳門' },
-  { id: 'dossier', code: '02', label: 'OPERATOR DOSSIER', kanji: '操縦者' },
-  { id: 'showcase', code: '03', label: 'PROJECT HOLOGRAM', kanji: '投射体' },
-  { id: 'career', code: '04', label: 'CAREER CHRONO', kanji: '経歴録' },
-  { id: 'academic', code: '05', label: 'ACADEMIC MATRIX', kanji: '学歴録' },
-  { id: 'services', code: '06', label: 'CAPABILITIES', kanji: '機能群' },
-  { id: 'contact', code: '07', label: 'DIRECT UPLINK', kanji: '通信路' }
+  { id: 'hero', code: '01', kanjiNumeral: '壱', label: 'HAIDEN // MAIN HALL', kanji: '拝殿' },
+  { id: 'dossier', code: '02', kanjiNumeral: '弐', label: 'EMA-DEN // DOSSIER', kanji: '絵馬殿' },
+  { id: 'showcase', code: '03', kanjiNumeral: '参', label: 'KAGURA-DEN // ARCHIVE', kanji: '神楽殿' },
+  { id: 'career', code: '04', kanjiNumeral: '肆', label: 'SENBON TORII // CAREER', kanji: '千本鳥居' },
+  { id: 'academic', code: '05', kanjiNumeral: '伍', label: 'KYŌZŌ // ACADEMIC', kanji: '経蔵' },
+  { id: 'services', code: '06', kanjiNumeral: '陸', label: 'ROKKAKUDŌ // SERVICES', kanji: '六角堂' },
+  { id: 'contact', code: '07', kanjiNumeral: '漆', label: 'GOJUNOTŌ // UPLINK', kanji: '五重塔' }
 ]
 
 export function useScrollSnap() {

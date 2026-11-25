@@ -1,9 +1,10 @@
 import { Suspense, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
+import { Environment, Lightformer } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import * as THREE from 'three'
 
-import { InfiniteCyberGrid } from './InfiniteCyberGrid'
+import { SacredCourtyardFloor3D } from './SacredCourtyardFloor3D'
 import { GlobalParticles3D } from './GlobalParticles3D'
 import { ToriiStation3D } from './landmarks/ToriiStation3D'
 import { CyberShrine3D } from './landmarks/CyberShrine3D'
@@ -20,61 +21,58 @@ interface CameraRigProps {
   isWarping?: boolean
 }
 
-// Camera coordinates & lookAt targets per chamber
+// Spatial Shrine Pilgrimage Camera Coordinates per Chamber
 const CHAMBER_CAMERA_CONFIGS = [
-  // 0: Hero Gateway
-  { pos: [0, 0.8, 6.2], lookAt: [0, 0.4, 0] },
-  // 1: Operator Dossier (Data Citadel)
-  { pos: [0, 0.4, 5.4], lookAt: [0, 0.2, 0] },
-  // 2: Project Showcase (Hologram Pedestal)
-  { pos: [0, 0.1, 5.0], lookAt: [0, -0.2, 0] },
-  // 3: Career Chrono-Console (Chrono-Stream)
-  { pos: [0, 0.3, 5.5], lookAt: [0, 0.1, 0] },
-  // 4: Academic Matrix (Neural Lattice)
-  { pos: [0, 0.5, 5.6], lookAt: [0, 0.2, 0] },
-  // 5: Capabilities (Modular Cluster)
-  { pos: [0, 0.3, 5.4], lookAt: [0, 0.0, 0] },
-  // 6: Direct Uplink (Uplink Beacon)
-  { pos: [0, 0.9, 6.0], lookAt: [0, 0.8, 0] }
+  // 0: Hero Gateway (Haiden Main Worship Hall)
+  { pos: [0, 0.72, 5.8], lookAt: [0, 0.42, -2.2] },
+  // 1: Operator Dossier (Ema-den & Chozuya Pavilion)
+  { pos: [-0.3, 0.75, 5.8], lookAt: [0, 0.4, -0.8] },
+  // 2: Project Showcase (Kagura-den Stage & Yata-no-Kagami)
+  { pos: [0, 0.45, 5.3], lookAt: [0, 0.1, 0.0] },
+  // 3: Career Logs (Senbon Torii Chronicle Corridor)
+  { pos: [0, 0.7, 5.0], lookAt: [0, 0.5, -5.5] },
+  // 4: Academic Matrix (Taiko-bashi & Kyozou Scrolls)
+  { pos: [0, 0.85, 6.0], lookAt: [0, 0.35, -0.5] },
+  // 5: Capabilities (Rokkakudo & Six Sacred Toro)
+  { pos: [0, 1.0, 6.2], lookAt: [0, 0.3, -1.2] },
+  // 6: Direct Uplink (Gojunoto Five-Story Pagoda & Suzu Altar)
+  { pos: [0, 1.25, 6.8], lookAt: [0, 1.65, -2.5] },
 ]
 
 function CameraRig({ activeChamber, isEntered = false, isWarping = false }: CameraRigProps) {
-  const currentLookAt = useRef(new THREE.Vector3(0, 0.4, 0))
+  const currentLookAt = useRef(new THREE.Vector3(0, 0.7, -0.5))
 
   useFrame((state, delta) => {
-    // When not entered, always lock camera strictly to Torii Gate (Chamber 0)
     const chamber = isEntered ? activeChamber : 0
     let config = CHAMBER_CAMERA_CONFIGS[chamber] || CHAMBER_CAMERA_CONFIGS[0]
 
     if (chamber === 0) {
       if (isWarping) {
-        // Walking pace forward through the gate
-        config = { pos: [0, 0.5, 3.5], lookAt: [0, 0.35, -3.5] }
+        // Fluid dolly forward through Ichi-no-Torii toward Haiden courtyard
+        config = { pos: [0, 0.68, 4.2], lookAt: [0, 0.42, -3.5] }
       } else if (isEntered) {
-        // Inside Sanctuary facing the Cyber Shrine
-        config = { pos: [0, 0.5, 4.6], lookAt: [0, 0.35, 0] }
+        // Inside Sanctuary facing Haiden Main Worship Hall
+        config = CHAMBER_CAMERA_CONFIGS[0]
       } else {
-        // Initial state: Standing outside facing Torii Gate
-        config = { pos: [0, 0.8, 6.2], lookAt: [0, 0.4, 0] }
+        // Initial state: Standing outside facing Ichi-no-Torii & Komagitsune
+        config = { pos: [0, 0.9, 6.6], lookAt: [0, 0.7, -0.5] }
       }
     }
 
-    const dampSpeed = isWarping ? 2.6 : 3.5
+    const dampSpeed = isWarping ? 2.0 : 3.5
 
-    // Mouse Parallax Offset
-    const parallaxX = state.pointer.x * 0.45
-    const parallaxY = -state.pointer.y * 0.3
+    // Subtle Mouse Parallax Offset
+    const parallaxX = state.pointer.x * 0.42
+    const parallaxY = -state.pointer.y * 0.28
 
     const targetX = config.pos[0] + parallaxX
     const targetY = config.pos[1] + parallaxY
     const targetZ = config.pos[2]
 
-    // Smooth Camera Position Lerping
     state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, targetX, dampSpeed, delta)
     state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, targetY, dampSpeed, delta)
     state.camera.position.z = THREE.MathUtils.damp(state.camera.position.z, targetZ, dampSpeed, delta)
 
-    // Smooth LookAt Target Lerping
     const targetLookAtX = config.lookAt[0] + parallaxX * 0.3
     const targetLookAtY = config.lookAt[1] + parallaxY * 0.2
     const targetLookAtZ = config.lookAt[2]
@@ -100,85 +98,124 @@ export function GlobalCyberScene3D({
   isEntered = false,
   isWarping = false,
 }: GlobalCyberScene3DProps) {
-  // Landmarks should only be active once inside the experience
   const effectiveChamber = isEntered ? activeChamber : 0
 
   return (
     <div className="fixed inset-0 w-full h-[100dvh] pointer-events-none z-0">
       <Canvas
-        camera={{ position: [0, 0.8, 6.2], fov: 48 }}
+        camera={{ position: [0, 0.9, 6.6], fov: 48 }}
         gl={{
           antialias: true,
           alpha: true,
-          powerPreference: 'high-performance'
+          powerPreference: 'high-performance',
         }}
         dpr={[1, 1.5]}
       >
-        {/* Deep Cyber Universe Atmosphere */}
-        <color attach="background" args={['#07080d']} />
-        <fog attach="fog" args={['#07080d', 7, 24]} />
+        {/* Sacred Night Shrine Sky & Organic Exponential Mist */}
+        <color attach="background" args={['#05070b']} />
+        <fogExp2 attach="fog" args={['#070910', 0.042]} />
 
-        {/* Global Key & Accent Lighting */}
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[-6, 5, 4]} intensity={2.0} color="#00f0ff" />
-        <directionalLight position={[6, 5, 4]} intensity={1.8} color="#ff0055" />
-        <pointLight position={[0, 8, 2]} intensity={1.2} color="#00f0ff" />
+        {/* 3-Layer Cinematic Shrine Lighting */}
+        <ambientLight intensity={0.35} color="#cbd5e1" />
+        {/* Moonlight Silver-Blue Rim Light */}
+        <directionalLight position={[4, 10, -8]} intensity={1.6} color="#7dd3fc" />
+        {/* Warm Lantern Amber Key Light */}
+        <directionalLight position={[-5, 6, 5]} intensity={2.0} color="#fbbf24" />
+        {/* Vermilion Sanctuary Bounce Fill */}
+        <directionalLight position={[5, 3, 4]} intensity={1.2} color="#f43f5e" />
+        {/* Spirit Jade Overhead Accent */}
+        <pointLight position={[0, 6, 2]} intensity={1.1} color="#2dd4bf" distance={18} />
 
         <Suspense fallback={null}>
-          {/* Dynamic Interpolated Camera Rig */}
+          {/* Procedural Environment Reflections for Kinpaku Gold & Vermilion Lacquer */}
+          <Environment resolution={256}>
+            <Lightformer
+              form="circle"
+              intensity={1.8}
+              color="#93c5fd"
+              position={[0, 10, -4]}
+              rotation={[Math.PI / 2, 0, 0]}
+              scale={[12, 12, 1]}
+            />
+            <Lightformer
+              form="rect"
+              intensity={2.4}
+              color="#f59e0b"
+              position={[-8, 2, 2]}
+              rotation={[0, Math.PI / 2, 0]}
+              scale={[6, 3, 1]}
+            />
+            <Lightformer
+              form="rect"
+              intensity={1.6}
+              color="#e11d48"
+              position={[8, 1.5, 0]}
+              rotation={[0, -Math.PI / 2, 0]}
+              scale={[6, 2, 1]}
+            />
+            <Lightformer
+              form="ring"
+              intensity={1.2}
+              color="#2dd4bf"
+              position={[0, 2, 8]}
+              scale={[5, 5, 1]}
+            />
+          </Environment>
+
+          {/* Dynamic Spatial Camera Rig */}
           <CameraRig
             activeChamber={effectiveChamber}
             isEntered={isEntered}
             isWarping={isWarping}
           />
 
-          {/* Continuous Cyber Floor Grid */}
-          <InfiniteCyberGrid />
+          {/* Reflective Wet Basalt Courtyard & Sando Walkway */}
+          <SacredCourtyardFloor3D />
 
-          {/* Continuous Floating Data Particle Swarm */}
+          {/* 3-Layer Atmospheric Particles (Golden Embers, Yozakura Petals, Kitsunebi Wisps) */}
           <GlobalParticles3D />
 
-          {/* Station 0A: Hero Cyber Torii Gate & Kitsune Guardians (Outside) */}
+          {/* Station 0A: Ichi-no-Torii & Komagitsune Guardians (Outside) */}
           <ToriiStation3D
             activeChamber={effectiveChamber}
             isEntered={isEntered}
             isWarping={isWarping}
           />
 
-          {/* Station 0B: Hero Cyber Shrine (Inner Sanctum - Approaching from distance) */}
+          {/* Station 0B: Haiden Main Worship Hall */}
           <CyberShrine3D
             activeChamber={effectiveChamber}
             isEntered={isEntered}
             isWarping={isWarping}
           />
 
-          {/* Station 1: Operator Dossier Data Citadel Monoliths */}
+          {/* Station 1: Chozuya & Ema-den Pavilion (Operator Dossier) */}
           <DataCitadel3D activeChamber={effectiveChamber} />
 
-          {/* Station 2: Project Showcase Hologram Pedestal Laser Rings */}
+          {/* Station 2: Kagura-den & Yata-no-Kagami Stage (Project Showcase) */}
           <HologramStation3D activeChamber={effectiveChamber} />
 
-          {/* Station 3: Career Chrono-Stream Warp Rails */}
+          {/* Station 3: Senbon Torii Chronicle Corridor (Career Logs) */}
           <ChronoStream3D activeChamber={effectiveChamber} />
 
-          {/* Station 4: Academic Neural Lattice Circuit Bridge */}
+          {/* Station 4: Taiko-bashi & Kyozou Scrolls (Academic Matrix) */}
           <NeuralLattice3D activeChamber={effectiveChamber} />
 
-          {/* Station 5: Capabilities Hexagonal Modular Cluster */}
+          {/* Station 5: Rokkakudo & Six Sacred Toro (Capabilities) */}
           <CapabilitiesCluster3D activeChamber={effectiveChamber} />
 
-          {/* Station 6: Direct Uplink Cyber Beacon */}
+          {/* Station 6: Gojunoto Five-Story Pagoda & Suzu Altar (Direct Uplink) */}
           <UplinkBeacon3D activeChamber={effectiveChamber} />
 
-          {/* Single Unified Post-Processing Pipeline (60 FPS) */}
+          {/* Calibrated Post-Processing Pipeline */}
           <EffectComposer multisampling={0}>
             <Bloom
-              intensity={1.2}
-              luminanceThreshold={0.45}
-              luminanceSmoothing={0.5}
+              intensity={0.85}
+              luminanceThreshold={0.55}
+              luminanceSmoothing={0.65}
               mipmapBlur
             />
-            <Vignette eskil={false} offset={0.15} darkness={1.1} />
+            <Vignette eskil={false} offset={0.18} darkness={0.95} />
           </EffectComposer>
         </Suspense>
       </Canvas>

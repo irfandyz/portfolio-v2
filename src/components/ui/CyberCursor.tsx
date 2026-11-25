@@ -6,7 +6,6 @@ export function CyberCursor() {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    // Only enable custom cursor on fine-pointer devices (mouse/trackpad, not touchscreen)
     const isTouch = window.matchMedia('(pointer: coarse)').matches
     if (isTouch) return
 
@@ -46,7 +45,7 @@ export function CyberCursor() {
 
   return (
     <>
-      {/* Outer Rotating Crosshair Ring */}
+      {/* Outer Sacred Tomoe Reticle */}
       <div
         className="fixed top-0 left-0 pointer-events-none z-50 transition-transform duration-75 ease-out"
         style={{
@@ -54,23 +53,23 @@ export function CyberCursor() {
         }}
       >
         <div
-          className={`rounded-full border border-cyan-400/70 transition-all duration-200 flex items-center justify-center ${
+          className={`rounded-full border transition-all duration-200 flex items-center justify-center ${
             isPointer
-              ? 'w-10 h-10 border-pink-500/80 shadow-[0_0_15px_rgba(244,63,94,0.6)] rotate-45'
-              : 'w-7 h-7 shadow-[0_0_10px_rgba(0,240,255,0.4)]'
+              ? 'w-10 h-10 border-rose-500/85 shadow-[0_0_15px_rgba(225,29,72,0.6)] rotate-45'
+              : 'w-7 h-7 border-amber-400/70 shadow-[0_0_10px_rgba(251,191,36,0.35)]'
           }`}
         >
-          {/* Subtle crosshair notches */}
-          <div className="absolute top-0 w-0.5 h-1 bg-cyan-400" />
-          <div className="absolute bottom-0 w-0.5 h-1 bg-cyan-400" />
-          <div className="absolute left-0 w-1 h-0.5 bg-cyan-400" />
-          <div className="absolute right-0 w-1 h-0.5 bg-cyan-400" />
+          {/* Gold Cardinal Notches */}
+          <div className="absolute top-0 w-0.5 h-1 bg-amber-300" />
+          <div className="absolute bottom-0 w-0.5 h-1 bg-amber-300" />
+          <div className="absolute left-0 w-1 h-0.5 bg-amber-300" />
+          <div className="absolute right-0 w-1 h-0.5 bg-amber-300" />
         </div>
       </div>
 
-      {/* Center Micro Dot */}
+      {/* Kitsunebi Jade Center Micro Dot */}
       <div
-        className="fixed top-0 left-0 pointer-events-none z-50 w-1.5 h-1.5 rounded-full bg-cyan-300 shadow-[0_0_6px_rgba(0,240,255,0.9)]"
+        className="fixed top-0 left-0 pointer-events-none z-50 w-1.5 h-1.5 rounded-full bg-teal-300 shadow-[0_0_8px_rgba(45,212,191,0.9)]"
         style={{
           transform: `translate3d(${position.x}px, ${position.y}px, 0) translate(-50%, -50%)`
         }}

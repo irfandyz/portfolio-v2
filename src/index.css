@@ -2,19 +2,73 @@
 
 @layer base {
   :root {
-    --cyber-black: #07080d;
-    --cyber-dark: #0e111a;
-    --cyber-panel: rgba(15, 18, 29, 0.75);
-    --cyber-cyan: #00f0ff;
-    --cyber-magenta: #ff0055;
-    --cyber-amber: #ffe600;
-    --cyber-emerald: #00ff88;
+    /* Sacred Neo-Shinto Palette */
+    --shrine-void: #05070b;
+    --shrine-wood: #0c1018;
+    --shrine-stone: #141923;
+    --shrine-vermilion: #e11d48;
+    --shrine-crimson: #9f1239;
+    --shrine-gold: #fbbf24;
+    --shrine-amber: #f59e0b;
+    --shrine-jade: #2dd4bf;
+    --shrine-sakura: #fb7185;
+    --shrine-washi: #f8fafc;
+
+    /* Multi-Stop Gradient Tokens */
+    --grad-shrine-atmosphere: radial-gradient(
+      ellipse at 50% 25%,
+      rgba(225, 29, 72, 0.08) 0%,
+      rgba(45, 212, 191, 0.04) 40%,
+      #05070b 85%
+    );
+    --grad-imperial-border: linear-gradient(
+      90deg,
+      transparent 0%,
+      #9f1239 18%,
+      #e11d48 42%,
+      #fbbf24 68%,
+      #2dd4bf 88%,
+      transparent 100%
+    );
+    --grad-washi-surface: linear-gradient(
+      155deg,
+      rgba(16, 20, 30, 0.88) 0%,
+      rgba(10, 12, 18, 0.92) 55%,
+      rgba(24, 10, 16, 0.85) 100%
+    );
+    --grad-sacred-cta: linear-gradient(
+      135deg,
+      #be123c 0%,
+      #e11d48 45%,
+      #d97706 100%
+    );
+    --grad-spirit-cta: linear-gradient(
+      135deg,
+      rgba(13, 148, 136, 0.25) 0%,
+      rgba(45, 212, 191, 0.12) 100%
+    );
+    --grad-pearl-gold: linear-gradient(
+      180deg,
+      #fffbeb 0%,
+      #fde68a 45%,
+      #f59e0b 85%,
+      #e11d48 100%
+    );
+
+    /* Legacy Aliases (Preserved for v1.0 component compatibility until Phase 5) */
+    --cyber-black: var(--shrine-void);
+    --cyber-dark: var(--shrine-wood);
+    --cyber-panel: rgba(12, 16, 24, 0.84);
+    --cyber-cyan: var(--shrine-jade);
+    --cyber-magenta: var(--shrine-vermilion);
+    --cyber-amber: var(--shrine-gold);
+    --cyber-emerald: var(--shrine-jade);
   }
 
   body {
     font-family: 'Space Grotesk', sans-serif;
-    background-color: var(--cyber-black);
-    color: #f1f5f9;
+    background-color: var(--shrine-void);
+    color: var(--shrine-washi);
   }
 
   code, pre, .font-tech {
@@ -22,7 +76,7 @@
   }
 }
 
-/* Custom Cyber Aesthetics */
+/* Custom Typography */
 .font-display {
   font-family: 'Syne', sans-serif;
 }
@@ -31,20 +85,144 @@
   font-family: 'Noto Sans JP', sans-serif;
 }
 
-/* Cyber Glassmorphism */
+/* ============================================================================
+ * Sacred Neo-Shinto Surface & Ornament System
+ * ========================================================================== */
+
+.shrine-glass {
+  background: var(--grad-washi-surface);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(251, 191, 36, 0.18);
+  box-shadow:
+    0 12px 36px 0 rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 0 rgba(254, 240, 138, 0.06);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.shrine-glass:hover {
+  border-color: rgba(225, 29, 72, 0.52);
+  box-shadow:
+    0 14px 40px 0 rgba(0, 0, 0, 0.68),
+    0 0 24px rgba(225, 29, 72, 0.14),
+    inset 0 1px 0 0 rgba(251, 191, 36, 0.12);
+}
+
+.shrine-glass-active {
+  background: linear-gradient(
+    155deg,
+    rgba(24, 14, 20, 0.9) 0%,
+    rgba(10, 13, 20, 0.94) 60%,
+    rgba(13, 30, 28, 0.85) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  box-shadow:
+    0 14px 42px 0 rgba(0, 0, 0, 0.72),
+    0 0 28px rgba(251, 191, 36, 0.16);
+}
+
+/* Traditional Kumiko / Asanoha Subtle Background Lattice Pattern */
+.kumiko-grid-bg {
+  background-image:
+    linear-gradient(30deg, rgba(251, 191, 36, 0.035) 12%, transparent 12.5%, transparent 87%, rgba(251, 191, 36, 0.035) 87.5%, rgba(251, 191, 36, 0.035)),
+    linear-gradient(150deg, rgba(251, 191, 36, 0.035) 12%, transparent 12.5%, transparent 87%, rgba(251, 191, 36, 0.035) 87.5%, rgba(251, 191, 36, 0.035)),
+    linear-gradient(30deg, rgba(251, 191, 36, 0.035) 12%, transparent 12.5%, transparent 87%, rgba(251, 191, 36, 0.035) 87.5%, rgba(251, 191, 36, 0.035)),
+    linear-gradient(150deg, rgba(251, 191, 36, 0.035) 12%, transparent 12.5%, transparent 87%, rgba(251, 191, 36, 0.035) 87.5%, rgba(251, 191, 36, 0.035)),
+    linear-gradient(60deg, rgba(225, 29, 72, 0.025) 25%, transparent 25.5%, transparent 75%, rgba(225, 29, 72, 0.025) 75%, rgba(225, 29, 72, 0.025));
+  background-size: 40px 70px;
+  background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0;
+}
+
+/* Traditional Japanese Red Square Hanko Seal Badge */
+.hanko-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(190, 18, 60, 0.18);
+  border: 1px solid rgba(225, 29, 72, 0.65);
+  color: #fda4af;
+  box-shadow: inset 0 0 8px rgba(225, 29, 72, 0.25);
+  letter-spacing: 0.08em;
+}
+
+/* Kazari-Kanagu Gold/Vermilion Corner Ornament Bracket */
+.kazari-corner {
+  position: relative;
+}
+
+.kazari-corner::before,
+.kazari-corner::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  transition: border-color 0.3s ease;
+}
+
+.kazari-corner::before {
+  top: 6px;
+  left: 6px;
+  border-top: 1.5px solid rgba(251, 191, 36, 0.6);
+  border-left: 1.5px solid rgba(251, 191, 36, 0.6);
+}
+
+.kazari-corner::after {
+  bottom: 6px;
+  right: 6px;
+  border-bottom: 1.5px solid rgba(225, 29, 72, 0.6);
+  border-right: 1.5px solid rgba(225, 29, 72, 0.6);
+}
+
+/* Imperial Accent Divider Line */
+.shrine-accent-bar {
+  background: var(--grad-imperial-border);
+}
+
+/* Neo-Shinto Glow Utilities */
+.glow-vermilion {
+  box-shadow: 0 0 24px rgba(225, 29, 72, 0.42);
+}
+
+.glow-gold {
+  box-shadow: 0 0 24px rgba(251, 191, 36, 0.35);
+}
+
+.glow-jade {
+  box-shadow: 0 0 24px rgba(45, 212, 191, 0.38);
+}
+
+.glow-text-gold {
+  text-shadow: 0 0 14px rgba(251, 191, 36, 0.55);
+}
+
+.glow-text-vermilion {
+  text-shadow: 0 0 14px rgba(225, 29, 72, 0.65);
+}
+
+.glow-text-jade {
+  text-shadow: 0 0 12px rgba(45, 212, 191, 0.6);
+}
+
+/* ============================================================================
+ * Refined Legacy Compatibility Classes (Will be retired progressively in Phase 5)
+ * ========================================================================== */
+
 .cyber-glass {
-  background: rgba(14, 18, 28, 0.75);
+  background: var(--grad-washi-surface);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 240, 255, 0.18);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(251, 191, 36, 0.16);
+  box-shadow: 0 10px 34px 0 rgba(0, 0, 0, 0.55);
 }
 
 .cyber-glass:hover {
-  border-color: rgba(0, 240, 255, 0.45);
+  border-color: rgba(225, 29, 72, 0.45);
 }
 
-/* Chamfered Box Cuts (Sudut Miring Futuristik) */
+/* Chamfered Box Cuts */
 .cyber-cut {
   clip-path: polygon(
     0 12px,
@@ -68,37 +246,37 @@
   );
 }
 
-/* Scanline Overlay */
+/* Subtle Washi Silk Weave Texture (Refined from Harsh CRT Scanlines) */
 .cyber-scanline {
-  background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%,
-    rgba(0, 0, 0, 0.25) 50%
-  ),
-  linear-gradient(
-    90deg,
-    rgba(255, 0, 0, 0.03),
-    rgba(0, 255, 0, 0.01),
-    rgba(0, 0, 255, 0.03)
-  );
-  background-size: 100% 3px, 4px 100%;
+  background:
+    linear-gradient(
+      rgba(18, 16, 16, 0) 50%,
+      rgba(0, 0, 0, 0.16) 50%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(225, 29, 72, 0.018),
+      rgba(251, 191, 36, 0.012),
+      rgba(45, 212, 191, 0.018)
+    );
+  background-size: 100% 4px, 6px 100%;
   pointer-events: none;
 }
 
-/* Neon Glow Utilities */
 .glow-cyan {
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.45);
+  box-shadow: 0 0 25px rgba(45, 212, 191, 0.38);
 }
 
 .glow-magenta {
-  box-shadow: 0 0 25px rgba(255, 0, 85, 0.45);
+  box-shadow: 0 0 25px rgba(225, 29, 72, 0.42);
 }
 
 .glow-text-cyan {
-  text-shadow: 0 0 12px rgba(0, 240, 255, 0.7);
+  text-shadow: 0 0 12px rgba(45, 212, 191, 0.65);
 }
 
 .glow-text-magenta {
-  text-shadow: 0 0 12px rgba(255, 0, 85, 0.7);
+  text-shadow: 0 0 12px rgba(225, 29, 72, 0.65);
 }
 
 /* Prevent Mobile Scroll Chaining for Inner Containers */
@@ -110,26 +288,26 @@
   touch-action: pan-y;
 }
 
-/* Custom Cyber Scrollbar */
+/* Custom Shrine Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #07080d;
+  background: #05070b;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 240, 255, 0.35);
+  background: rgba(251, 191, 36, 0.3);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 240, 255, 0.7);
+  background: rgba(225, 29, 72, 0.65);
 }
 
-/* Screen Shake Keyframes for Cyber Gate Breach */
+/* Screen Shake Keyframes */
 @keyframes shake {
   0%, 100% {
     transform: translate(0, 0) rotate(0deg);
@@ -147,5 +325,3 @@
     transform: translate(3px, 2px) rotate(0.3deg);
   }
 }
-
-

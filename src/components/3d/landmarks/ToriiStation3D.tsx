@@ -19,18 +19,18 @@ export function ToriiStation3D({
   useFrame((_, delta) => {
     if (!groupRef.current) return
 
-    let targetZ = -0.8
+    let targetZ = -0.6
     let targetScale = 1.0
     let targetY = 0.0
 
     if (isWarping) {
-      // Walking pace through gate: Torii gate glides smoothly past the camera
-      targetZ = 12.0
-      targetScale = 1.6
-      targetY = 0.1
+      // Walking pace through Ichi-no-Torii: camera passes cleanly beneath Shimenawa
+      targetZ = 10.5
+      targetScale = 1.75
+      targetY = -0.35
     } else if (isEntered) {
-      // Once entered, Torii gate remains far behind camera in the distance
-      targetZ = 16.0
+      // Once entered, gate recedes far behind the camera
+      targetZ = 15.0
       targetScale = 0.001
       targetY = -1.0
     } else if (activeChamber !== 0) {
@@ -39,8 +39,7 @@ export function ToriiStation3D({
       targetY = -1.0
     }
 
-    // Gentle walking damp speed (2.8) instead of rushing
-    const dampSpeed = isWarping ? 2.8 : 4.0
+    const dampSpeed = isWarping ? 2.2 : 4.0
 
     groupRef.current.scale.x = THREE.MathUtils.damp(groupRef.current.scale.x, targetScale, dampSpeed, delta)
     groupRef.current.scale.y = THREE.MathUtils.damp(groupRef.current.scale.y, targetScale, dampSpeed, delta)
@@ -52,7 +51,7 @@ export function ToriiStation3D({
   })
 
   return (
-    <group ref={groupRef} position={[0, 0, -0.8]}>
+    <group ref={groupRef} position={[0, 0, -0.6]}>
       <ToriiGate3D />
     </group>
   )

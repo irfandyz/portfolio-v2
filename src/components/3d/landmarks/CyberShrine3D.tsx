@@ -1,6 +1,17 @@
-import { useRef, useMemo, useEffect } from 'react'
+import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { useShrineMaterials } from '../../../utils/shrineMaterials'
+import {
+  createKanjiPlaqueTexture,
+  createMandalaSealTexture,
+  createSoftParticleTexture,
+} from '../../../utils/shrineTextures'
+import {
+  CurvedTempleRoof,
+  IshiDoroLantern,
+  ShimenawaRope,
+} from '../primitives/ShrinePrimitives'
 
 interface CyberShrine3DProps {
   activeChamber: number
@@ -8,77 +19,117 @@ interface CyberShrine3DProps {
   isWarping?: boolean
 }
 
+const SHRINE_EMBER_COUNT = 72
+
+function createSeededRandom(seed: number): () => number {
+  let state = seed >>> 0
+  return () => {
+    state += 0x6d2b79f5
+    let t = Math.imul(state ^ (state >>> 15), 1 | state)
+    t ^= t + Math.imul(t ^ (t >>> 7), 61 | t)
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
 export function CyberShrine3D({
   activeChamber,
   isEntered,
   isWarping = false,
 }: CyberShrine3DProps) {
+  const materials = useShrineMaterials()
   const groupRef = useRef<THREE.Group>(null)
   const innerLightRef = useRef<THREE.PointLight>(null)
   const lanternsRef = useRef<THREE.Group>(null)
-  const warpStartTimeRef = useRef<number | null>(null)
+  const mandalaRef = useRef<THREE.Mesh>(null)
+  const suzuRef = useRef<THREE.Group>(null)
 
-  // Track elapsed time since warp started
-  useEffect(() => {
-    if (isWarping && warpStartTimeRef.current === null) {
-      warpStartTimeRef.current = performance.now()
-    } else if (!isWarping && isEntered) {
-      warpStartTimeRef.current = null
-    }
-  }, [isWarping, isEntered])
+  const { emberPositions, emberColors, emberTex, gakuMaterial, mandalaMaterial } = useMemo(() => {
+    const rand = createSeededRandom(80217)
+    const pos = new Float32Array(SHRINE_EMBER_COUNT * 3)
+    const col = new Float32Array(SHRINE_EMBER_COUNT * 3)
+    const gold = new THREE.Color('#fbbf24')
+    const jade = new THREE.Color('#2dd4bf')
 
-  // Floating ambient shrine embers
-  const emberCount = 60
-  const [emberPositions] = useMemo(() => {
-    const pos = new Float32Array(emberCount * 3)
-    for (let i = 0; i < emberCount; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 5
-      pos[i * 3 + 1] = Math.random() * 3
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 5
+    for (let i = 0; i < SHRINE_EMBER_COUNT; i++) {
+      pos[i * 3] = (rand() - 0.5) * 6.5
+      pos[i * 3 + 1] = -1.8 + rand() * 4.2
+      pos[i * 3 + 2] = (rand() - 0.5) * 5.2
+      const chosen = rand() > 0.3 ? gold : jade
+      col[i * 3] = chosen.r
+      col[i * 3 + 1] = chosen.g
+      col[i * 3 + 2] = chosen.b
     }
-    return [pos]
+
+    const gakuTex = createKanjiPlaqueTexture({
+      kanji: '拝殿',
+      subtitle: '神域 // HAIDEN',
+      textColor: '#fbbf24',
+      borderColor: '#e11d48',
+      bgColor: '#0e131d',
+      sealText: '神',
+    })
+
+    const gakuMat = new THREE.MeshStandardMaterial({
+      map: gakuTex,
+      emissiveMap: gakuTex,
+      emissive: '#fbbf24',
+      emissiveIntensity: 0.72,
+      roughness: 0.35,
+      metalness: 0.2,
+    })
+
+    const mandalaTex = createMandalaSealTexture({
+      primaryColor: '#2dd4bf',
+      secondaryColor: '#fbbf24',
+    })
+
+    const mandalaMat = new THREE.MeshBasicMaterial({
+      map: mandalaTex,
+      transparent: true,
+      opacity: 0.78,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
+
+    return {
+      emberPositions: pos,
+      emberColors: col,
+      emberTex: createSoftParticleTexture('ember'),
+      gakuMaterial: gakuMat,
+      mandalaMaterial: mandalaMat,
+    }
   }, [])
 
   useFrame((state, delta) => {
     if (!groupRef.current) return
 
     let targetScale = 1.0
-    let targetZ = 0.0
+    let targetZ = -2.8
     let targetY = -0.2
-    let dampSpeed = 3.5
+    let dampSpeed = 2.6
 
     if (activeChamber === 0) {
       if (isWarping) {
-        const elapsed = warpStartTimeRef.current ? performance.now() - warpStartTimeRef.current : 0
-        // STEP 1 DELAY: While walking through the Torii Gate (~1100ms), shrine waits deep in the distance
-        if (elapsed < 1100) {
-          targetZ = -22.0
-          targetScale = 0.3
-          targetY = -0.1
-          dampSpeed = 2.0
-        } else {
-          // STEP 2 REVEAL: Torii gate has passed, shrine emerges slowly and majestically from the deep fog
-          targetZ = 0.0
-          targetScale = 1.0
-          targetY = -0.2
-          dampSpeed = 2.2 // Gentle, graceful approaching speed
-        }
-      } else if (isEntered) {
-        // STEP 3: Sits majestic in front of camera in Hero section
-        targetZ = 0.0
+        // Immediate continuous glide from deep courtyard to sanctuary focal point
+        targetZ = -2.8
         targetScale = 1.0
         targetY = -0.2
-        dampSpeed = 3.5
+        dampSpeed = 1.85
+      } else if (isEntered) {
+        targetZ = -2.8
+        targetScale = 1.0
+        targetY = -0.2
+        dampSpeed = 2.6
       } else {
-        // Initial state before entering: Placed far in the deep distance behind fog!
-        targetZ = -22.0
-        targetScale = 0.3
-        targetY = -0.1
-        dampSpeed = 2.0
+        targetZ = -13.5
+        targetScale = 0.85
+        targetY = -0.2
+        dampSpeed = 2.5
       }
     } else {
-      // Chamber 1..6 navigation: flies forward past camera
-      targetZ = 4.0
+      // Chamber 1..6: recedes smoothly so user enters inner pavilions
+      targetZ = 4.2
       targetScale = 0.001
       targetY = -1.5
       dampSpeed = 4.0
@@ -92,298 +143,307 @@ export function CyberShrine3D({
 
     groupRef.current.visible = groupRef.current.scale.x > 0.05
 
-    // Subtle gentle floating breathing animation
     const time = state.clock.getElapsedTime()
+
     if (activeChamber === 0 && isEntered) {
-      groupRef.current.position.y = targetY + Math.sin(time * 1.2) * 0.05
-      // Mouse tilt parallax
-      const targetRotY = state.pointer.x * 0.25
+      const targetRotY = state.pointer.x * 0.14
       groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotY, 0.05)
     }
 
-    // Inner shrine pulsing light (Gentle, dim warm candle ember)
     if (innerLightRef.current) {
-      innerLightRef.current.intensity = 0.45 + Math.sin(time * 2) * 0.08
+      innerLightRef.current.intensity = 0.55 + Math.sin(time * 2.4) * 0.1
     }
 
-    // Lantern subtle sway
     if (lanternsRef.current) {
-      lanternsRef.current.rotation.z = Math.sin(time * 1.5) * 0.05
+      lanternsRef.current.children.forEach((child, idx) => {
+        child.rotation.z = Math.sin(time * 1.4 + idx * 1.3) * 0.055
+      })
+    }
+
+    if (mandalaRef.current) {
+      mandalaRef.current.rotation.z = time * 0.25
+    }
+
+    if (suzuRef.current) {
+      suzuRef.current.rotation.z = Math.sin(time * 1.2) * 0.03
     }
   })
 
-  // Materials
-  const darkWood = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        color: '#080c14',
-        roughness: 0.35,
-        metalness: 0.8,
-      }),
-    []
-  )
+  const pillarCoords: [number, number][] = [
+    [-1.75, 1.05],
+    [1.75, 1.05],
+    [-1.75, -1.05],
+    [1.75, -1.05],
+    [-0.65, 1.05],
+    [0.65, 1.05],
+  ]
 
-  const stonePlinth = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        color: '#0a101d',
-        roughness: 0.6,
-        metalness: 0.4,
-      }),
-    []
-  )
-
-  const neonCyan = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        color: '#00f0ff',
-        emissive: '#00f0ff',
-        emissiveIntensity: 1.6,
-        roughness: 0.1,
-      }),
-    []
-  )
-
-  const neonPink = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        color: '#ff007f',
-        emissive: '#ff007f',
-        emissiveIntensity: 1.4,
-        roughness: 0.1,
-      }),
-    []
-  )
-
-  // Authentic Japanese Shoji Lattice Grid Texture (Dim, moody, dark paper with wooden Kumiko grid)
-  const shojiTexture = useMemo(() => {
-    const canvas = document.createElement('canvas')
-    canvas.width = 256
-    canvas.height = 256
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return new THREE.Texture()
-
-    // 1. Dark muted washi paper base (dim, not bright!)
-    ctx.fillStyle = '#181413'
-    ctx.fillRect(0, 0, 256, 256)
-
-    // Grid proportions: 4 columns x 6 rows of shoji panes
-    const cols = 4
-    const rows = 6
-    const cellW = 256 / cols
-    const cellH = 256 / rows
-
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const x = c * cellW
-        const y = r * cellH
-        // Subtle, very dim soft amber center gradient per pane
-        const grad = ctx.createRadialGradient(
-          x + cellW / 2, y + cellH / 2, 2,
-          x + cellW / 2, y + cellH / 2, cellW / 1.4
-        )
-        grad.addColorStop(0, '#2e2019') // Soft dim ember tone
-        grad.addColorStop(1, '#1a1412') // Deep dark edge
-        ctx.fillStyle = grad
-        ctx.fillRect(x + 2, y + 2, cellW - 4, cellH - 4)
-      }
-    }
-
-    // 2. Wooden Kumiko Grid Lines (Dark obsidian-wood frame lines)
-    ctx.strokeStyle = '#080c14'
-    ctx.lineWidth = 4
-
-    // Vertical lattice dividers
-    for (let c = 0; c <= cols; c++) {
-      ctx.beginPath()
-      ctx.moveTo(c * cellW, 0)
-      ctx.lineTo(c * cellW, 256)
-      ctx.stroke()
-    }
-    // Horizontal lattice dividers
-    for (let r = 0; r <= rows; r++) {
-      ctx.beginPath()
-      ctx.moveTo(0, r * cellH)
-      ctx.lineTo(256, r * cellH)
-      ctx.stroke()
-    }
-
-    // Outer sturdy frame
-    ctx.lineWidth = 8
-    ctx.strokeRect(0, 0, 256, 256)
-
-    const texture = new THREE.CanvasTexture(canvas)
-    texture.wrapS = THREE.RepeatWrapping
-    texture.wrapT = THREE.RepeatWrapping
-    return texture
-  }, [])
-
-  // Dim, Non-Blinding Shoji Material
-  const shojiMaterial = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        map: shojiTexture,
-        roughness: 0.85,
-        metalness: 0.1,
-        emissive: '#d97736',
-        emissiveMap: shojiTexture,
-        emissiveIntensity: 0.18, // Very dim, moody ambiance
-      }),
-    [shojiTexture]
-  )
+  const steps = [
+    { y: -1.48, z: 1.52, w: 1.44 },
+    { y: -1.62, z: 1.68, w: 1.48 },
+    { y: -1.76, z: 1.84, w: 1.52 },
+    { y: -1.9, z: 2.0, w: 1.56 },
+  ]
 
   return (
-    <group ref={groupRef} position={[0, -0.1, -22.0]} scale={[0.3, 0.3, 0.3]}>
-      {/* 1. Stone Foundation Plinth & Steps */}
-      <mesh position={[0, -0.4, 0]} material={stonePlinth}>
-        <boxGeometry args={[3.2, 0.2, 3.2]} />
+    <group ref={groupRef} position={[0, -0.2, -13.5]} scale={[0.85, 0.85, 0.85]}>
+      {/* === 1. STEPPED BASALT KIDAN FOUNDATION & FRONT STAIRS === */}
+      <mesh position={[0, -1.75, 0]} material={materials.chiselledBasalt}>
+        <boxGeometry args={[4.8, 0.36, 3.6]} />
       </mesh>
-      <mesh position={[0, -0.25, 0]} material={stonePlinth}>
-        <boxGeometry args={[2.8, 0.15, 2.8]} />
-      </mesh>
-      {/* Front Steps */}
-      <mesh position={[0, -0.45, 1.6]} material={stonePlinth}>
-        <boxGeometry args={[1.2, 0.1, 0.6]} />
-      </mesh>
-      <mesh position={[0, -0.35, 1.4]} material={stonePlinth}>
-        <boxGeometry args={[1.0, 0.1, 0.4]} />
+      <mesh position={[0, -1.48, 0]} material={materials.chiselledBasalt}>
+        <boxGeometry args={[4.2, 0.24, 3.0]} />
       </mesh>
 
-      {/* 2. Main Shrine Chamber (Honden / Haiden) */}
-      {/* Wooden Pillars (4 Corner Columns) */}
-      <mesh position={[-0.9, 0.5, -0.9]} material={darkWood}>
-        <cylinderGeometry args={[0.07, 0.08, 1.4, 16]} />
-      </mesh>
-      <mesh position={[0.9, 0.5, -0.9]} material={darkWood}>
-        <cylinderGeometry args={[0.07, 0.08, 1.4, 16]} />
-      </mesh>
-      <mesh position={[-0.9, 0.5, 0.9]} material={darkWood}>
-        <cylinderGeometry args={[0.07, 0.08, 1.4, 16]} />
-      </mesh>
-      <mesh position={[0.9, 0.5, 0.9]} material={darkWood}>
-        <cylinderGeometry args={[0.07, 0.08, 1.4, 16]} />
-      </mesh>
-
-      {/* Neon Base Column Trims */}
-      <mesh position={[-0.9, -0.15, 0.9]} material={neonCyan}>
-        <cylinderGeometry args={[0.09, 0.09, 0.05, 16]} />
-      </mesh>
-      <mesh position={[0.9, -0.15, 0.9]} material={neonCyan}>
-        <cylinderGeometry args={[0.09, 0.09, 0.05, 16]} />
-      </mesh>
-      <mesh position={[-0.9, -0.15, -0.9]} material={neonCyan}>
-        <cylinderGeometry args={[0.09, 0.09, 0.05, 16]} />
-      </mesh>
-      <mesh position={[0.9, -0.15, -0.9]} material={neonCyan}>
-        <cylinderGeometry args={[0.09, 0.09, 0.05, 16]} />
-      </mesh>
-
-      {/* Authentic Japanese Shoji Lattice Walls (Dim, Moody, Kumiko Grid) */}
-      {/* Back Wall */}
-      <mesh position={[0, 0.5, -0.85]} material={shojiMaterial}>
-        <planeGeometry args={[1.65, 1.2]} />
-      </mesh>
-      {/* Left Wall */}
-      <mesh position={[-0.85, 0.5, 0]} rotation={[0, Math.PI / 2, 0]} material={shojiMaterial}>
-        <planeGeometry args={[1.65, 1.2]} />
-      </mesh>
-      {/* Right Wall */}
-      <mesh position={[0.85, 0.5, 0]} rotation={[0, -Math.PI / 2, 0]} material={shojiMaterial}>
-        <planeGeometry args={[1.65, 1.2]} />
-      </mesh>
-      {/* Front Wall (Flanking Central Shrine Doorway) */}
-      <mesh position={[-0.6, 0.5, 0.85]} material={shojiMaterial}>
-        <planeGeometry args={[0.45, 1.2]} />
-      </mesh>
-      <mesh position={[0.6, 0.5, 0.85]} material={shojiMaterial}>
-        <planeGeometry args={[0.45, 1.2]} />
-      </mesh>
-
-      {/* Inner Shrine Sanctuary Hearth Light (Dim, Warm, Atmospheric) */}
-      <pointLight
-        ref={innerLightRef}
-        position={[0, 0.5, 0]}
-        color="#cc6622"
-        intensity={0.45}
-        distance={3.0}
-      />
-
-      {/* Central Holographic Altar Gem */}
-      <mesh position={[0, 0.35, 0]}>
-        <octahedronGeometry args={[0.18]} />
-        <meshStandardMaterial
-          color="#00f0ff"
-          emissive="#00f0ff"
-          emissiveIntensity={2.5}
-          wireframe
-        />
-      </mesh>
-
-      {/* 3. Pagoda Roof Architecture (Tier 1 & Tier 2 Curved Eaves) */}
-      {/* Roof Support Beams (Kumimono Brackets) */}
-      <mesh position={[0, 1.2, 0]} material={darkWood}>
-        <boxGeometry args={[2.0, 0.1, 2.0]} />
-      </mesh>
-      <mesh position={[0, 1.25, 0]} material={neonPink}>
-        <boxGeometry args={[2.08, 0.03, 2.08]} />
-      </mesh>
-
-      {/* Main Curved Pagoda Roof (Pyramidal Japanese Temple Eaves) */}
-      <mesh position={[0, 1.5, 0]} material={darkWood}>
-        <coneGeometry args={[1.9, 0.65, 4]} />
-      </mesh>
-      {/* Neon Cyan Roof Ridge Trims */}
-      <mesh position={[0, 1.52, 0]} material={neonCyan}>
-        <coneGeometry args={[1.94, 0.62, 4]} />
-      </mesh>
-
-      {/* Top Roof Finial (Hoju / Sacred Jewel Finial) */}
-      <mesh position={[0, 1.95, 0]} material={neonCyan}>
-        <cylinderGeometry args={[0.04, 0.08, 0.35, 12]} />
-      </mesh>
-      <mesh position={[0, 2.15, 0]} material={neonPink}>
-        <sphereGeometry args={[0.1, 16, 16]} />
-      </mesh>
-
-      {/* 4. Hanging Cyber Lanterns (Left & Right) */}
-      <group ref={lanternsRef}>
-        {/* Left Lantern */}
-        <group position={[-1.25, 0.8, 1.1]}>
-          <mesh material={darkWood}>
-            <cylinderGeometry args={[0.08, 0.06, 0.22, 6]} />
+      {/* Front Stone Staircase (Kizahashi) */}
+      <group>
+        {steps.map((st, idx) => (
+          <mesh key={idx} position={[0, st.y, st.z]} material={materials.chiselledBasalt}>
+            <boxGeometry args={[st.w, 0.14, 0.2]} />
           </mesh>
-          <mesh position={[0, -0.05, 0]} material={neonCyan}>
-            <boxGeometry args={[0.14, 0.16, 0.14]} />
+        ))}
+        {/* Stepped Vermilion Stair Curbs */}
+        {[-0.8, 0.8].map((xPos, idx) => (
+          <mesh
+            key={idx}
+            position={[xPos, -1.66, 1.75]}
+            rotation={[0.68, 0, 0]}
+            material={materials.vermilionLacquer}
+          >
+            <boxGeometry args={[0.1, 0.14, 0.88]} />
           </mesh>
-          <pointLight color="#00f0ff" intensity={1.4} distance={2.5} />
-        </group>
-
-        {/* Right Lantern */}
-        <group position={[1.25, 0.8, 1.1]}>
-          <mesh material={darkWood}>
-            <cylinderGeometry args={[0.08, 0.06, 0.22, 6]} />
-          </mesh>
-          <mesh position={[0, -0.05, 0]} material={neonCyan}>
-            <boxGeometry args={[0.14, 0.16, 0.14]} />
-          </mesh>
-          <pointLight color="#00f0ff" intensity={1.4} distance={2.5} />
-        </group>
+        ))}
       </group>
 
-      {/* 5. Floating Sacred Cyber Embers around Shrine */}
+      {/* === 2. ENGAWA VERANDA, KORAN RAILINGS & SAISEN-BAKO OFFERING BOX === */}
+      <mesh position={[0, -1.32, 0]} material={materials.darkHinokiWood}>
+        <boxGeometry args={[4.35, 0.1, 3.15]} />
+      </mesh>
+      {/* Gold Veranda Edge Trim */}
+      <mesh position={[0, -1.36, 0]} material={materials.kinpakuGold}>
+        <boxGeometry args={[4.38, 0.025, 3.18]} />
+      </mesh>
+
+      {/* Front Left & Right Koran Railings (leaving central steps open) */}
+      {[-1.4, 1.4].map((xCenter, sideIdx) => (
+        <group key={sideIdx} position={[xCenter, -1.04, 1.48]}>
+          <mesh position={[0, 0.12, 0]} material={materials.vermilionLacquer}>
+            <boxGeometry args={[1.3, 0.055, 0.06]} />
+          </mesh>
+          <mesh position={[0, -0.04, 0]} material={materials.vermilionLacquer}>
+            <boxGeometry args={[1.3, 0.04, 0.05]} />
+          </mesh>
+          {[-0.6, 0.6].map((px, pIdx) => (
+            <group key={pIdx} position={[px, 0, 0]}>
+              <mesh material={materials.vermilionLacquer}>
+                <boxGeometry args={[0.07, 0.42, 0.07]} />
+              </mesh>
+              <mesh position={[0, 0.24, 0]} material={materials.kinpakuGold}>
+                <sphereGeometry args={[0.048, 12, 12]} />
+              </mesh>
+            </group>
+          ))}
+        </group>
+      ))}
+
+      {/* Side Koran Railings */}
+      {[-2.08, 2.08].map((xSide, idx) => (
+        <group key={idx} position={[xSide, -1.04, 0]}>
+          <mesh position={[0, 0.12, 0]} material={materials.vermilionLacquer}>
+            <boxGeometry args={[0.06, 0.055, 2.95]} />
+          </mesh>
+          <mesh position={[0, -0.04, 0]} material={materials.vermilionLacquer}>
+            <boxGeometry args={[0.05, 0.04, 2.95]} />
+          </mesh>
+          {[-1.4, 0, 1.4].map((pz, pIdx) => (
+            <mesh key={pIdx} position={[0, 0, pz]} material={materials.vermilionLacquer}>
+              <boxGeometry args={[0.07, 0.42, 0.07]} />
+            </mesh>
+          ))}
+        </group>
+      ))}
+
+      {/* Saisen-bako Offering Box */}
+      <group position={[0, -1.14, 1.15]}>
+        <mesh material={materials.darkHinokiWood}>
+          <boxGeometry args={[0.85, 0.28, 0.46]} />
+        </mesh>
+        <mesh position={[0, 0.145, 0]} material={materials.kinpakuGold}>
+          <boxGeometry args={[0.88, 0.025, 0.48]} />
+        </mesh>
+      </group>
+
+      {/* === 3. MAIN HALL PILLARS, WASHI SHOJI WALLS & INNER ALTAR === */}
+      {pillarCoords.map(([px, pz], idx) => (
+        <group key={idx} position={[px, -0.49, pz]}>
+          <mesh material={materials.vermilionLacquer}>
+            <cylinderGeometry args={[0.09, 0.1, 1.56, 16]} />
+          </mesh>
+          <mesh position={[0, -0.74, 0]} material={materials.kinpakuGold}>
+            <cylinderGeometry args={[0.115, 0.12, 0.08, 16]} />
+          </mesh>
+          <mesh position={[0, 0.72, 0]} material={materials.kinpakuGold}>
+            <cylinderGeometry args={[0.105, 0.105, 0.06, 16]} />
+          </mesh>
+        </group>
+      ))}
+
+      {/* Upper Horizontal Lintel Beams (Nageshi) */}
+      <mesh position={[0, 0.24, 1.05]} material={materials.vermilionLacquer}>
+        <boxGeometry args={[3.7, 0.14, 0.18]} />
+      </mesh>
+      <mesh position={[0, 0.24, -1.05]} material={materials.vermilionLacquer}>
+        <boxGeometry args={[3.7, 0.14, 0.18]} />
+      </mesh>
+
+      {/* Washi Shoji Lattice Enclosure Walls */}
+      <mesh position={[0, -0.5, -1.0]} material={materials.washiShoji}>
+        <planeGeometry args={[3.4, 1.48]} />
+      </mesh>
+      <mesh position={[-1.72, -0.5, 0]} rotation={[0, Math.PI / 2, 0]} material={materials.washiShoji}>
+        <planeGeometry args={[2.0, 1.48]} />
+      </mesh>
+      <mesh position={[1.72, -0.5, 0]} rotation={[0, -Math.PI / 2, 0]} material={materials.washiShoji}>
+        <planeGeometry args={[2.0, 1.48]} />
+      </mesh>
+      {/* Front Flanking Shoji Screens (Center Doorway Open) */}
+      <mesh position={[-1.2, -0.5, 1.02]} material={materials.washiShoji}>
+        <planeGeometry args={[0.98, 1.48]} />
+      </mesh>
+      <mesh position={[1.2, -0.5, 1.02]} material={materials.washiShoji}>
+        <planeGeometry args={[0.98, 1.48]} />
+      </mesh>
+
+      {/* Inner Sacred Altar Mandala Seal & Warm Hearth Light */}
+      <mesh ref={mandalaRef} position={[0, -0.48, 0.05]} material={mandalaMaterial}>
+        <planeGeometry args={[1.05, 1.05]} />
+      </mesh>
+      <mesh position={[0, -0.88, 0.05]} material={materials.chiselledBasalt}>
+        <cylinderGeometry args={[0.35, 0.44, 0.22, 8]} />
+      </mesh>
+      <pointLight
+        ref={innerLightRef}
+        position={[0, -0.42, 0.25]}
+        color="#f59e0b"
+        intensity={0.55}
+        distance={4.8}
+        decay={2}
+      />
+
+      {/* === 4. SHIMENAWA ROPE, GAKU PLAQUE & GOLDEN SUZU BELL === */}
+      <ShimenawaRope
+        span={1.45}
+        sag={0.14}
+        thickness={0.045}
+        shideCount={4}
+        position={[0, 0.08, 1.15]}
+      />
+      <group position={[0, 0.27, 1.14]}>
+        <mesh material={materials.kinpakuGold}>
+          <boxGeometry args={[0.78, 0.44, 0.05]} />
+        </mesh>
+        <mesh position={[0, 0, 0.03]} material={gakuMaterial}>
+          <planeGeometry args={[0.7, 0.36]} />
+        </mesh>
+      </group>
+      <group ref={suzuRef} position={[0, -0.08, 1.12]}>
+        <mesh material={materials.kinpakuGold}>
+          <sphereGeometry args={[0.095, 16, 16]} />
+        </mesh>
+        <mesh position={[0, -0.45, 0]} material={materials.vermilionLacquer}>
+          <cylinderGeometry args={[0.022, 0.026, 0.85, 8]} />
+        </mesh>
+      </group>
+
+      {/* === 5. TWO-TIER CURVED IRIMOYA ROOFS === */}
+      <CurvedTempleRoof
+        sides={4}
+        width={5.1}
+        depth={3.8}
+        height={0.68}
+        soriCurvature={0.25}
+        showFinial={false}
+        showRafters={true}
+        position={[0, 0.25, 0]}
+      />
+
+      {/* Upper Story Core (Joso) */}
+      <group position={[0, 0.74, 0]}>
+        <mesh material={materials.darkHinokiWood}>
+          <boxGeometry args={[2.75, 0.54, 2.05]} />
+        </mesh>
+        <mesh position={[0, 0, 1.035]} material={materials.washiShoji}>
+          <planeGeometry args={[2.2, 0.38]} />
+        </mesh>
+        <mesh position={[0, 0, -1.035]} rotation={[0, Math.PI, 0]} material={materials.washiShoji}>
+          <planeGeometry args={[2.2, 0.38]} />
+        </mesh>
+        <mesh position={[0, 0.25, 0]} material={materials.vermilionLacquer}>
+          <boxGeometry args={[2.86, 0.08, 2.16]} />
+        </mesh>
+      </group>
+
+      <CurvedTempleRoof
+        sides={4}
+        width={3.9}
+        depth={3.0}
+        height={0.82}
+        soriCurvature={0.3}
+        showFinial={true}
+        showRafters={true}
+        position={[0, 0.98, 0]}
+      />
+
+      {/* === 6. HANGING CHOCHIN PAPER LANTERNS & COURTYARD ISHI-DORO LANTERNS === */}
+      <group ref={lanternsRef}>
+        {[-1.55, 1.55].map((xPos, idx) => (
+          <group key={idx} position={[xPos, -0.06, 1.25]}>
+            <mesh position={[0, 0.14, 0]} material={materials.darkHinokiWood}>
+              <cylinderGeometry args={[0.015, 0.015, 0.2, 8]} />
+            </mesh>
+            <mesh position={[0, 0.04, 0]} material={materials.kinpakuGold}>
+              <cylinderGeometry args={[0.09, 0.07, 0.05, 12]} />
+            </mesh>
+            <mesh position={[0, -0.08, 0]} material={materials.lanternAmberEmissive}>
+              <cylinderGeometry args={[0.095, 0.095, 0.2, 12]} />
+            </mesh>
+            <mesh position={[0, -0.2, 0]} material={materials.kinpakuGold}>
+              <cylinderGeometry args={[0.07, 0.09, 0.045, 12]} />
+            </mesh>
+            <pointLight position={[0, -0.08, 0]} color="#f59e0b" intensity={0.75} distance={3.2} decay={2} />
+          </group>
+        ))}
+      </group>
+
+      {/* Flanking Courtyard Stone Lanterns (Ishi-doro) */}
+      <IshiDoroLantern
+        position={[-2.35, -1.92, 1.85]}
+        scale={0.78}
+        flameColor="amber"
+        withPointLight={false}
+      />
+      <IshiDoroLantern
+        position={[2.35, -1.92, 1.85]}
+        scale={0.78}
+        flameColor="amber"
+        withPointLight={false}
+      />
+
+      {/* Shrine Sacred Golden & Jade Embers */}
       <points>
         <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[emberPositions, 3]}
-          />
+          <bufferAttribute attach="attributes-position" args={[emberPositions, 3]} />
+          <bufferAttribute attach="attributes-color" args={[emberColors, 3]} />
         </bufferGeometry>
         <pointsMaterial
-          size={0.06}
-          color="#00f0ff"
+          map={emberTex}
+          size={0.13}
+          vertexColors
           transparent
-          opacity={0.8}
+          opacity={0.78}
+          alphaTest={0.01}
           blending={THREE.AdditiveBlending}
+          depthWrite={false}
         />
       </points>
     </group>

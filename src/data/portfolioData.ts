@@ -262,7 +262,7 @@ export const EDUCATION_DATA: EducationItem[] = [
     institution: 'Universitas Catur Insan Cendekia',
     degree: 'D3 Manajemen Informatika',
     period: '2023 – 2026',
-    status: 'Tingkat Akhir / Lulus ●',
+    status: 'Lulus ●',
     focus: [
       'Perancangan & Arsitektur Sistem Informasi Korporat',
       'Manajemen & Rekayasa Basis Data Relasional Tingkat Lanjut',

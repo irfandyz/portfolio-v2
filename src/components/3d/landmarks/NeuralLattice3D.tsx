@@ -1,18 +1,67 @@
-import { useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { useShrineMaterials } from '../../../utils/shrineMaterials'
+import { createMandalaSealTexture } from '../../../utils/shrineTextures'
+import {
+  CurvedTempleRoof,
+  KakemonoScroll3D,
+  TaikoBashiBridge3D,
+} from '../primitives/ShrinePrimitives'
 
 interface NeuralLattice3DProps {
   activeChamber: number
 }
 
 export function NeuralLattice3D({ activeChamber }: NeuralLattice3DProps) {
+  const materials = useShrineMaterials()
   const groupRef = useRef<THREE.Group>(null)
-  const leftNodeRef = useRef<THREE.Mesh>(null)
-  const rightNodeRef = useRef<THREE.Mesh>(null)
-  const leftRingRef = useRef<THREE.Mesh>(null)
-  const rightRingRef = useRef<THREE.Mesh>(null)
-  const pulseRef = useRef<THREE.Mesh>(null)
+  const pondMandalaRef = useRef<THREE.Mesh>(null)
+  const leftHaloRef = useRef<THREE.Mesh>(null)
+  const rightHaloRef = useRef<THREE.Mesh>(null)
+  const pulseGroupRef = useRef<THREE.Group>(null)
+
+  const { pondMandalaMat, goldHaloMat, jadeHaloMat } = useMemo(() => {
+    const pondTex = createMandalaSealTexture({
+      primaryColor: '#2dd4bf',
+      secondaryColor: '#fbbf24',
+    })
+    const goldTex = createMandalaSealTexture({
+      primaryColor: '#fbbf24',
+      secondaryColor: '#e11d48',
+    })
+    const jadeTex = createMandalaSealTexture({
+      primaryColor: '#2dd4bf',
+      secondaryColor: '#fbbf24',
+    })
+
+    return {
+      pondMandalaMat: new THREE.MeshBasicMaterial({
+        map: pondTex,
+        transparent: true,
+        opacity: 0.38,
+        side: THREE.DoubleSide,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      }),
+      goldHaloMat: new THREE.MeshBasicMaterial({
+        map: goldTex,
+        transparent: true,
+        opacity: 0.65,
+        side: THREE.DoubleSide,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      }),
+      jadeHaloMat: new THREE.MeshBasicMaterial({
+        map: jadeTex,
+        transparent: true,
+        opacity: 0.65,
+        side: THREE.DoubleSide,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      }),
+    }
+  }, [])
 
   useFrame((state, delta) => {
     if (!groupRef.current) return
@@ -29,98 +78,132 @@ export function NeuralLattice3D({ activeChamber }: NeuralLattice3DProps) {
 
     const time = state.clock.getElapsedTime()
 
-    if (leftNodeRef.current) {
-      leftNodeRef.current.rotation.x = time * 0.6
-      leftNodeRef.current.rotation.y = time * 0.8
-    }
-    if (rightNodeRef.current) {
-      rightNodeRef.current.rotation.x = -time * 0.6
-      rightNodeRef.current.rotation.y = time * 0.7
-    }
-    if (leftRingRef.current) leftRingRef.current.rotation.z = time * 0.5
-    if (rightRingRef.current) rightRingRef.current.rotation.z = -time * 0.5
+    if (pondMandalaRef.current) pondMandalaRef.current.rotation.z = time * 0.18
+    if (leftHaloRef.current) leftHaloRef.current.rotation.z = time * 0.25
+    if (rightHaloRef.current) rightHaloRef.current.rotation.z = -time * 0.25
 
-    // Data pulse oscillating between left and right
-    if (pulseRef.current) {
-      pulseRef.current.position.x = Math.sin(time * 2.5) * 3.2
+    if (pulseGroupRef.current) {
+      const px = Math.sin(time * 1.6) * 2.3
+      const py = -1.1 + 0.74 * (1 - Math.pow(px / 2.3, 2))
+      pulseGroupRef.current.position.set(px, py, -0.9)
+      pulseGroupRef.current.rotation.y = time * 2.2
     }
   })
 
   return (
-    <group ref={groupRef} position={[0, 0, -1]}>
-      {/* === LEFT NODE: Universitas CIC (Higher Education) === */}
-      <group position={[-3.2, 0.4, 0]}>
-        <mesh ref={leftNodeRef}>
-          <octahedronGeometry args={[0.7, 0]} />
-          <meshStandardMaterial
-            color="#00f0ff"
-            emissive="#00f0ff"
-            emissiveIntensity={2.5}
-            roughness={0.1}
-          />
-        </mesh>
-        <mesh scale={[1.25, 1.25, 1.25]}>
-          <octahedronGeometry args={[0.7, 0]} />
-          <meshBasicMaterial color="#00f0ff" wireframe transparent opacity={0.6} />
-        </mesh>
-        <mesh ref={leftRingRef}>
-          <torusGeometry args={[1.1, 0.02, 8, 36]} />
-          <meshBasicMaterial color="#00f0ff" />
-        </mesh>
-        <pointLight color="#00f0ff" intensity={3.0} distance={6} />
-      </group>
+    <group ref={groupRef} position={[0, 0, 0]} scale={0.001} visible={false}>
+      {/* === 1. CENTRAL ARCHED TAIKO-BASHI BRIDGE & SPIRIT POND === */}
+      <TaikoBashiBridge3D
+        span={4.6}
+        width={1.4}
+        archHeight={0.74}
+        position={[0, -2.06, -0.9]}
+      />
+      <mesh
+        ref={pondMandalaRef}
+        position={[0, -2.11, -0.9]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        material={pondMandalaMat}
+      >
+        <planeGeometry args={[4.4, 4.4]} />
+      </mesh>
 
-      {/* === RIGHT NODE: SMK Al-Irsyad RPL (Vocational Foundation) === */}
-      <group position={[3.2, 0.4, 0]}>
-        <mesh ref={rightNodeRef}>
-          <icosahedronGeometry args={[0.65, 0]} />
-          <meshStandardMaterial
-            color="#ec4899"
-            emissive="#ec4899"
-            emissiveIntensity={2.5}
-            roughness={0.1}
-          />
+      {/* === 2A. LEFT KYOZOU SCROLL SHRINE: UNIVERSITAS CIC (D3 INFORMATICS) === */}
+      <group position={[-3.65, 0, -1.1]} rotation={[0, 0.24, 0]}>
+        <mesh position={[0, -1.92, 0]} material={materials.chiselledBasalt}>
+          <boxGeometry args={[2.25, 0.36, 1.05]} />
         </mesh>
-        <mesh scale={[1.25, 1.25, 1.25]}>
-          <icosahedronGeometry args={[0.65, 0]} />
-          <meshBasicMaterial color="#ec4899" wireframe transparent opacity={0.6} />
+        {[-0.92, 0.92].map((px, idx) => (
+          <group key={idx} position={[px, -0.32, 0]}>
+            <mesh material={materials.vermilionLacquer}>
+              <cylinderGeometry args={[0.085, 0.095, 3.3, 14]} />
+            </mesh>
+            <mesh position={[0, -1.56, 0]} material={materials.kinpakuGold}>
+              <cylinderGeometry args={[0.11, 0.115, 0.08, 14]} />
+            </mesh>
+          </group>
+        ))}
+        <mesh position={[0, 1.24, 0]} material={materials.vermilionLacquer}>
+          <boxGeometry args={[2.0, 0.1, 0.14]} />
         </mesh>
-        <mesh ref={rightRingRef}>
-          <torusGeometry args={[1.1, 0.02, 8, 36]} />
-          <meshBasicMaterial color="#ec4899" />
-        </mesh>
-        <pointLight color="#ec4899" intensity={3.0} distance={6} />
-      </group>
-
-      {/* === CENTRAL CONNECTING LASER BRIDGE LINE === */}
-      <mesh position={[0, 0.4, 0]}>
-        <boxGeometry args={[6.4, 0.04, 0.04]} />
-        <meshStandardMaterial
-          color="#a855f7"
-          emissive="#a855f7"
-          emissiveIntensity={2.8}
+        <CurvedTempleRoof
+          sides={4}
+          width={2.4}
+          depth={1.1}
+          height={0.44}
+          soriCurvature={0.18}
+          showFinial={true}
+          showRafters={true}
+          position={[0, 1.32, 0]}
         />
-      </mesh>
+        <mesh ref={leftHaloRef} position={[0, -0.1, -0.12]} material={goldHaloMat}>
+          <planeGeometry args={[2.1, 2.1]} />
+        </mesh>
+        <KakemonoScroll3D
+          width={1.25}
+          height={2.3}
+          kanji="情報工学"
+          subtitle="D3 INFORMATICS"
+          sealText="学"
+          accentColor="gold"
+          position={[0, -0.1, 0.05]}
+        />
+        <pointLight position={[0, 0.2, 0.6]} color="#fbbf24" intensity={1.8} distance={5.5} decay={2} />
+      </group>
 
-      {/* Oscillating Neon Signal Pulse Packet */}
-      <mesh ref={pulseRef} position={[0, 0.4, 0]}>
-        <sphereGeometry args={[0.15, 16, 16]} />
-        <meshBasicMaterial color="#ffffff" />
-      </mesh>
+      {/* === 2B. RIGHT KYOZOU SCROLL SHRINE: SMK AL-IRSYAD (RPL FOUNDATION) === */}
+      <group position={[3.65, 0, -1.1]} rotation={[0, -0.24, 0]}>
+        <mesh position={[0, -1.92, 0]} material={materials.chiselledBasalt}>
+          <boxGeometry args={[2.25, 0.36, 1.05]} />
+        </mesh>
+        {[-0.92, 0.92].map((px, idx) => (
+          <group key={idx} position={[px, -0.32, 0]}>
+            <mesh material={materials.vermilionLacquer}>
+              <cylinderGeometry args={[0.085, 0.095, 3.3, 14]} />
+            </mesh>
+            <mesh position={[0, -1.56, 0]} material={materials.kinpakuGold}>
+              <cylinderGeometry args={[0.11, 0.115, 0.08, 14]} />
+            </mesh>
+          </group>
+        ))}
+        <mesh position={[0, 1.24, 0]} material={materials.vermilionLacquer}>
+          <boxGeometry args={[2.0, 0.1, 0.14]} />
+        </mesh>
+        <CurvedTempleRoof
+          sides={4}
+          width={2.4}
+          depth={1.1}
+          height={0.44}
+          soriCurvature={0.18}
+          showFinial={true}
+          showRafters={true}
+          position={[0, 1.32, 0]}
+        />
+        <mesh ref={rightHaloRef} position={[0, -0.1, -0.12]} material={jadeHaloMat}>
+          <planeGeometry args={[2.1, 2.1]} />
+        </mesh>
+        <KakemonoScroll3D
+          width={1.25}
+          height={2.3}
+          kanji="基礎算法"
+          subtitle="SMK RPL CORE"
+          sealText="技"
+          accentColor="jade"
+          position={[0, -0.1, 0.05]}
+        />
+        <pointLight position={[0, 0.2, 0.6]} color="#2dd4bf" intensity={1.8} distance={5.5} decay={2} />
+      </group>
 
-      {/* Circuit PCB Floor Lines */}
-      {[-2, -1, 0, 1, 2].map((x, i) => (
-        <group key={i} position={[x * 1.5, -1.8, -1]}>
-          <mesh>
-            <boxGeometry args={[0.04, 0.02, 5]} />
-            <meshStandardMaterial
-              color="#00f0ff"
-              emissive="#00f0ff"
-              emissiveIntensity={1.5}
-            />
-          </mesh>
-        </group>
-      ))}
+      {/* === 3. PARABOLIC WISDOM SPIRIT PULSE ABOVE TAIKO-BASHI === */}
+      <group ref={pulseGroupRef} position={[0, -0.36, -0.9]}>
+        <mesh material={materials.lanternAmberEmissive}>
+          <sphereGeometry args={[0.11, 16, 16]} />
+        </mesh>
+        <mesh rotation={[Math.PI / 2, 0, 0]} material={materials.spiritJadeEmissive}>
+          <torusGeometry args={[0.2, 0.016, 8, 24]} />
+        </mesh>
+        <pointLight color="#fbbf24" intensity={1.5} distance={4} decay={2} />
+      </group>
     </group>
   )
 }
